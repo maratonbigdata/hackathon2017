@@ -1,0 +1,36 @@
+html {
+    display: table;
+    margin: auto;
+}
+
+header {
+  width:100%;
+  position:absolute;
+  top:0;
+  left:0;
+}
+
+body {
+    display: table-cell;
+    vertical-align: middle;
+    width: 1024px;
+    padding-top: 70px;
+    padding-bottom: 50px;
+}
+
+label {
+  margin-top: 7px;
+  margin-bottom: 3px;
+}
+
+/**************** Buttons ********************/
+.btn1, .btn2{
+  float: left;
+  margin: 5px;
+  margin-top: 30px;
+}
+
+.btn3{
+  margin: 5px;
+  margin-top: 30px;
+}

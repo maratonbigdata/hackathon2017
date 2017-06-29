@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Editar Perfil</h1>
+
+    {{ form_start(edit_form) }}
+        {{ form_widget(edit_form) }}
+        <input type="submit" value="Guardar" />
+    {{ form_end(edit_form) }}
+
+    <a href="{{ path('profile_index') }}" class="btn btn-info btn2" role="button" >Perfiles</a>
+
+    {{ form_start(delete_form) }}
+        <input type="submit" value="Eliminar" class="btn btn-danger btn3" role="button">
+    {{ form_end(delete_form) }}
+
+{% endblock %}

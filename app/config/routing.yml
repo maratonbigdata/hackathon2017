@@ -1,3 +1,11 @@
-app:
-    resource: '@AppBundle/Controller/'
-    type: annotation
+teamup:
+    resource: "@TeamupBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+logout:
+    path:   /logout
+
+backend_security:
+    resource: "@TeamupBundle/Controller/SecurityController.php"
+    type:     annotation

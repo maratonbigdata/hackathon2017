@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>User creation</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="Create" />
+    {{ form_end(form) }}
+
+    <ul>
+        <li>
+            <a href="{{ path('user_index') }}">Back to the list</a>
+        </li>
+    </ul>
+
+    <script type="text/javascript">
+
+window.onload = function() {
+
+    addVerifierDigit();
+
+    $(".js-basic-single-profile").select2({
+        allowClear: false,
+        width: '100%'
+    })
+};
+
+function isValid()
+{
+    var rut = document.getElementById("teamupbundle_user_rut").value + "-" + document.getElementById("vd").value;
+    var rutValid = validaRut(rut);
+    if(!rutValid)
+    { 
+        alert("Rut no valido");
+        document.getElementById("teamupbundle_user_rut").focus();
+    }
+
+    var emailValid = verifyEmail();
+    if(!emailValid)
+    { 
+        alert("email no valido");
+        document.getElementById("teamupbundle_user_email").focus();
+    }
+
+    if(rutValid && emailValid)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+function verifyEmail()
+{
+    var email = document.getElementById("teamupbundle_user_email").value;
+
+    var re = /^(([a-z]+([a-z0-9.]+)*))@(([a-z]+([a-z0-9.]+)*).([a-z]*))$/;
+    return re.test(email);
+}
+
+
+function addVerifierDigit()
+{
+    var t = document.createTextNode("-");
+    document.getElementById("teamupbundle_user_rut").parentElement.appendChild(t);
+
+    var input = document.createElement("input");
+    input.type = "text";
+    input.id="vd"
+    input.className = "form-control";
+    input.style.width = "10%";
+    input.style.display = "inline";
+    input.style.marginLeft = "3px";
+    document.getElementById("teamupbundle_user_rut").parentElement.appendChild(input);
+
+    document.getElementById("teamupbundle_user_rut").style.width = "86%";
+    document.getElementById("teamupbundle_user_rut").style.display = "inline";
+    document.getElementById("teamupbundle_user_rut").style.marginRight = "3px";
+
+    document.getElementById("teamupbundle_user_rut").parentElement.firstElementChild.style.display = "block";
+
+    if(document.getElementById("teamupbundle_user_rut").value.length > 0)
+    {
+        input.value = dv(document.getElementById("teamupbundle_user_rut").value);
+    }
+}
+
+
+    // Valida el rut con su cadena completa "XXXXXXXX-X"
+function validaRut(rutCompleto) 
+{
+    if (!/^[0-9]+-[0-9kK]{1}$/.test( rutCompleto ))
+        return false;
+    var tmp     = rutCompleto.split('-');
+    var digv    = tmp[1]; 
+    var rut     = tmp[0];
+    if ( digv == 'K' ) digv = 'k' ;
+    return (dv(rut) == digv );
+}
+function dv(T)
+{
+    var M=0,S=1;
+    for(;T;T=Math.floor(T/10))
+        S=(S+T%10*(9-M++%6))%11;
+    return S?S-1:'k';
+}
+</script>
+{% endblock %}

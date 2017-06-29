@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Perfiles</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for profile in profiles %}
+            <tr>
+                <td><a href="{{ path('profile_show', { 'id': profile.id }) }}">{{ profile.id }}</a></td>
+                <td>{{ profile.name }}</td>
+                <td>{{ profile.description }}</td>
+                <td>
+                    <td><a href="{{ path('profile_show', { 'id': profile.id }) }}" class="btn btn-info btn-sm" role="button">Ver</a></td>
+                    <td><a href="{{ path('profile_edit', { 'id': profile.id }) }}" class="btn btn-primary btn-sm" role="button">Editar</a></td>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('profile_new') }}" class="btn btn-primary btn-sm" role="button">Crear Perfil</a>
+{% endblock %}

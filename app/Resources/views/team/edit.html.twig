@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Editar Equipo</h1>
+
+    <div class="panel panel-default" style="padding:10px;">
+	    {{ form_start(edit_form) }}
+	        {{ form_row(edit_form.name) }}
+	        {{ form_row(edit_form.status) }}
+
+	        <div class="panel panel-default" style="margin:10px 0 10px 10px;">
+	        	<div class="panel-heading">Missing Pieces</div>
+	        	<div class="panel-body">
+			        <ul class="neededs" data-prototype="{{ form_widget(edit_form.neededs.vars.prototype)|e('html_attr') }}">
+			        	{% for needed in edit_form.neededs %}
+				            <li>{{ form_row(needed.quantity) }}{{ form_row(needed.profile) }}</li>
+				    	{% endfor %}
+				    </ul>
+				</div>
+			</div>	        
+
+	        <input type="submit" class="btn btn1 btn-success" value="Guardar" />
+	    {{ form_end(edit_form) }}
+
+	    <a href="{{ path('team_index') }}" class="btn btn-info btn2" role="button" >Equipos</a>
+
+	    <a href="{{ path('team_users_edit', { 'id': team.id }) }}" class="btn btn-primary btn2" role="button" >Editar Miembros del Equipo</a>
+
+	    {{ form_start(delete_form) }}
+	        <input type="submit" value="Eliminar" class="btn btn-danger btn3" role="button">
+	    {{ form_end(delete_form) }}
+	</div>
+
+
+<script type="text/javascript"> 
+    var $collectionHolder;
+
+// setup an "add a tag" link
+var $addTagLink = $('<br><a style="float:right;" href="#" class="add_tag_link btn btn-sm btn-warning"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>');
+var $newLinkLi = $('<li></li>').append($addTagLink);
+
+jQuery(document).ready(function() 
+{
+    // Get the ul that holds the collection of neededs
+    $collectionHolder = $('ul.neededs');
+
+    // add the "add a tag" anchor and li to the neededs ul
+    $collectionHolder.append($newLinkLi);
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+    // add a delete link to all of the existing needed form li elements
+    $collectionHolder.find('li:contains("Cantidad")').each(function() {
+        addNeededFormDeleteLink($(this));
+    });
+
+    $addTagLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // add a new tag form (see next code block)
+        addNeededForm($collectionHolder, $newLinkLi);
+    });
+
+    $(".js-basic-single-profile").select2({
+        allowClear: false,
+        width: '100%'
+    })
+});
+
+function addNeededForm($collectionHolder, $newLinkLi) 
+{
+    // Get the data-prototype explained earlier
+    var prototype = $collectionHolder.data('prototype');
+
+    // get the new index
+    var index = $collectionHolder.data('index');
+
+    // Replace '__name__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    var newForm = prototype.replace(/__name__/g, index);
+
+    // increase the index with one for the next item
+    $collectionHolder.data('index', index + 1);
+
+    // Display the form in the page in an li, before the "Add a tag" link li
+    var $newFormLi = $('<li></li>').append(newForm);
+    $newLinkLi.before($newFormLi);
+
+	$(".js-basic-single-profile").select2({
+        allowClear: false,
+        width: '100%'
+    })
+
+     // add a delete link to the new form
+    addNeededFormDeleteLink($newFormLi);
+}
+
+function addNeededFormDeleteLink($tagFormLi) 
+{
+    var $removeFormA = $('<a style="float:right;" class="btn btn-danger btn-sm" href="#"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a><br>');
+    $tagFormLi.append($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // remove the li for the tag form
+        $tagFormLi.remove();
+    });
+}
+</script>
+
+{% endblock %}

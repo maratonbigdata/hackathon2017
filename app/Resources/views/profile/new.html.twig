@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Nuevo Perfil</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input type="submit" class="btn btn-primary btn1" role="button" value="Crear" onclick="return isValid();" />
+    {{ form_end(form) }}
+
+    <a href="{{ path('profile_index') }}" class="btn btn-info btn2" role="button">Perfiles</a>
+{% endblock %}

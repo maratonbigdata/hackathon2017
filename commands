@@ -1,0 +1,28 @@
+php app/console doctrine:database:create
+php app/console doctrine:generate:entity
+php app/console doctrine:generate:entities TeamupBundle/Entity/Deadline
+php app/console generate:doctrine:crud
+php app/console doctrine:schema:validate
+php app/console doctrine:schema:update --force
+
+exit(\Doctrine\Common\Util\Debug::dump($classCodeObject)[0]);
+php app/console doctrine:query:sql "select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='research'"
+
+$this->addFlash(
+    'notice',
+    array(
+        'alert' => 'danger',// danger, warning, info, success
+        'title' => 'Duplicado: ',
+        'message' => 'Uno o mas datos pertenecen a un usuario existente, intente nuevamente o Inicie Sesión'
+    )
+);
+
+export SYMFONY_ENV=prod
+
+php app/console cache:clear --env=prod --no-debug
+
+rm -rf app/cache/*
+rm -rf app/logs/*
+rm -rf web/uploads/*
+
+sudo service httpd restart

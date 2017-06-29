@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Postulantes</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Rut</th>
+                <th>Email</th>
+                <th>Brief</th>
+                <th>Perfil</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.id }}</a></td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.rut }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.brief }}</td>
+                <td>{{ user.profile.name }}</td>
+                <td>
+                    <td><a href="{{ path('user_show', { 'id': user.id }) }}" class="btn btn-info btn-sm" role="button">Ver</a></td>
+                <td><a href="{{ path('user_edit', { 'id': user.id }) }}" class="btn btn-primary btn-sm" role="button">Editar</a></td>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Miembros del Equipo</h1>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Miembros Actuales</div>
+        <div class="panel-body">  
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Rut</th>
+                        <th>Email</th>
+                        <th>Brief</th>
+                        <th>Perfil</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in team.users %}
+                    <tr>
+                        <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.id }}</a></td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.lastname }}</td>
+                        <td>{{ user.rut }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.brief }}</td>
+                        <td>{{ user.profile.name }}</td>
+                        <td>
+                            <td><a href="{{ path('user_show', { 'id': user.id }) }}" class="btn btn-info btn-sm" role="button">Ver</a></td>
+                            <td><a href="{{ path('user_edit', { 'id': user.id }) }}" class="btn btn-primary btn-sm" role="button">Editar</a></td>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Inscribir Nuevo Postulante</div>
+        <div class="panel-body">  
+            {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <input type="submit" class="btn btn1 btn-success" value="Inscribir" />
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+    <a href="{{ path('team_index') }}" class="btn btn-info btn2" role="button" >Equipos</a>
+
+    <script type="text/javascript">
+
+window.onload = function() {
+
+    addVerifierDigit();
+
+    $(".js-basic-single-profile").select2({
+        allowClear: false,
+        width: '100%'
+    })
+};
+
+function isValid()
+{
+    var rut = document.getElementById("teamupbundle_user_rut").value + "-" + document.getElementById("vd").value;
+    var rutValid = validaRut(rut);
+    if(!rutValid)
+    { 
+        alert("Rut no valido");
+        document.getElementById("teamupbundle_user_rut").focus();
+    }
+
+    var emailValid = verifyEmail();
+    if(!emailValid)
+    { 
+        alert("email no valido");
+        document.getElementById("teamupbundle_user_email").focus();
+    }
+
+    if(rutValid && emailValid)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+function verifyEmail()
+{
+    var email = document.getElementById("teamupbundle_user_email").value;
+
+    var re = /^(([a-z]+([a-z0-9.]+)*))@(([a-z]+([a-z0-9.]+)*).([a-z]*))$/;
+    return re.test(email);
+}
+
+
+function addVerifierDigit()
+{
+    var t = document.createTextNode("-");
+    document.getElementById("teamupbundle_user_rut").parentElement.appendChild(t);
+
+    var input = document.createElement("input");
+    input.type = "text";
+    input.id="vd"
+    input.className = "form-control";
+    input.style.width = "10%";
+    input.style.display = "inline";
+    input.style.marginLeft = "3px";
+    document.getElementById("teamupbundle_user_rut").parentElement.appendChild(input);
+
+    document.getElementById("teamupbundle_user_rut").style.width = "86%";
+    document.getElementById("teamupbundle_user_rut").style.display = "inline";
+    document.getElementById("teamupbundle_user_rut").style.marginRight = "3px";
+
+    document.getElementById("teamupbundle_user_rut").parentElement.firstElementChild.style.display = "block";
+
+    if(document.getElementById("teamupbundle_user_rut").value.length > 0)
+    {
+        input.value = dv(document.getElementById("teamupbundle_user_rut").value);
+    }
+}
+
+
+    // Valida el rut con su cadena completa "XXXXXXXX-X"
+function validaRut(rutCompleto) 
+{
+    if (!/^[0-9]+-[0-9kK]{1}$/.test( rutCompleto ))
+        return false;
+    var tmp     = rutCompleto.split('-');
+    var digv    = tmp[1]; 
+    var rut     = tmp[0];
+    if ( digv == 'K' ) digv = 'k' ;
+    return (dv(rut) == digv );
+}
+function dv(T)
+{
+    var M=0,S=1;
+    for(;T;T=Math.floor(T/10))
+        S=(S+T%10*(9-M++%6))%11;
+    return S?S-1:'k';
+}
+</script>
+{% endblock %}

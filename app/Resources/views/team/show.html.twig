@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Equipo</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ team.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ team.name }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{{ team.statustext }}</td>
+            </tr>
+            <tr>
+                <th>Fecha de Creación</th>
+                <td>{% if team.created %}{{ team.created|date('d-m-Y H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fecha de Modificiación</th>
+                <td>{% if team.modified %}{{ team.modified|date('d-m-Y H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Usuarios</th>
+                {% for user in team.users %}
+                    <td>user.name</td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('team_index') }}" class="btn btn-info btn1" role="button" >Equipos</a>
+    <a href="{{ path('team_edit', { 'id': team.id }) }}" class="btn btn-primary btn2" role="button">Editar</a>
+    <input type="submit" value="Eliminar" class="btn btn-danger btn2" role="button">
+
+{% endblock %}
