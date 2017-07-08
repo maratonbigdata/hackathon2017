@@ -9,7 +9,7 @@
 	        {{ form_row(edit_form.status) }}
 
 	        <div class="panel panel-default" style="margin:10px 0 10px 10px;">
-	        	<div class="panel-heading">Missing Pieces</div>
+	        	<div class="panel-heading">Se buscan...</div>
 	        	<div class="panel-body">
 			        <ul class="neededs" data-prototype="{{ form_widget(edit_form.neededs.vars.prototype)|e('html_attr') }}">
 			        	{% for needed in edit_form.neededs %}
