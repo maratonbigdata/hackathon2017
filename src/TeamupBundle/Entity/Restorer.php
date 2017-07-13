@@ -36,7 +36,7 @@ class Restorer
     private $auth;
 
     /**
-    * @ORM\OneToOne(targetEntity="User", inversedBy="restorer")
+    * @ORM\OneToOne(targetEntity="User", inversedBy="restorer", cascade={"persist"})
     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
     */
     private $user;

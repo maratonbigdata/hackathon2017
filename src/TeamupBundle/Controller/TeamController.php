@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Collections\ArrayCollection;
 use TeamupBundle\Entity\User;
+use TeamupBundle\Entity\Restorer;
 
 /**
  * Team controller.
@@ -42,6 +43,12 @@ class TeamController extends Controller
      */
     public function newAction(Request $request)
     {
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        if(strcmp($currentUser->getRole(), "ROLE_ADMIN") != 0 && !is_null($currentUser->getTeam()) )// si no es admin y tiene un equipo creado, redirigimos
+        {
+            return $this->redirectToRoute('home');
+        }
+
         $team = new Team();
         $form = $this->createForm('TeamupBundle\Form\TeamType', $team);
         $form->handleRequest($request);
@@ -63,7 +70,7 @@ class TeamController extends Controller
             $em->persist($team);
             $em->flush();
 
-            return $this->redirectToRoute('team_show', array('id' => $team->getId()));
+            return $this->redirectToRoute('team_edit', array('id' => $team->getId()));
         }
 
         return $this->render('team/new.html.twig', array(
@@ -183,17 +190,74 @@ class TeamController extends Controller
      */
     public function editUsersAction(Request $request, Team $team)
     {
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
         $user = new User();
         $form = $this->createForm('TeamupBundle\Form\UserType', $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) 
         {
-            $user->setTeam($team);
-            $user->setRole('ROLE_USER');
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            try
+            {
+                $user->setTeam($team);
+                $user->setIsActive(false);
+                $user->setRole('ROLE_USER');
+
+                // Encode the password (you could also do this via Doctrine listener)
+                $password = $this->get('security.password_encoder')
+                    ->encodePassword($user, 'aGxJEnmQOYy');
+                $user->setPassword($password);
+
+                $rb = uniqid(rand(), true);
+                $random = md5($user->getEmail().$rb);
+
+                $restorer = $em->getRepository('TeamupBundle:Restorer')->findOneByUser($user);
+                if(is_null($restorer))
+                {
+                    $restorer = new Restorer();
+                }
+
+                $restorer->setUser($user);
+                $restorer->setTime(new \DateTime());
+                $restorer->setAuth(md5($random));
+                $em->persist($restorer);
+                $em->flush();
+
+                $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+                $url = $baseurl.'/activeAccount?token='.$random;
+
+                $em->persist($user);
+                $em->flush();
+
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Bienvenido a Team Up!')
+                    ->setFrom('gestionIPre@ing.puc.cl')
+                    ->setTo(array($user->getEmail()))
+                    ->setBody('<html>' .
+                        ' <head></head>' .
+                        ' <body>' .
+                        'Hola, '.$currentUser->getFullName().' te ha agregado a su equipo. </br>'.
+                        'Usa este link para terminar tu inscripción y generar tu contraseña: ' .
+                        '<a href="'.$url.'">'.$url.'</a></br></br>'.
+                        '(No responda este email)</body>' .
+                        '</html>',
+                        'text/html')
+                ;
+                $this->get('mailer')->send($message);
+                $user = new User();
+            }
+            catch(UniqueConstraintViolationException $e)
+            {
+                $this->addFlash(
+                    'notice',
+                    array(
+                        'alert' => 'danger',// danger, warning, info, success
+                        'title' => 'Duplicado: ',
+                        'message' => 'Uno o mas datos pertenecen a un usuario existente, intente nuevamente'
+                    )
+                );
+            }
         }
 
         return $this->render('team/editUsers.html.twig', array(
@@ -201,4 +265,48 @@ class TeamController extends Controller
             'form' => $form->createView(),
         ));
     }
+
+    /**
+     * Eliminates a user from a team.
+     *
+     * @Route("/{tid}-{uid}/eliminateUser", name="team_eliminate_user")
+     * @Method({"GET", "POST"})
+     */
+    public function eliminateAction($tid, $uid)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $team = $em->getRepository('TeamupBundle:Team')->find($tid);
+        $user = $em->getRepository('TeamupBundle:User')->find($uid);
+
+        $user->setTeam(null);
+        $em->persist($team);
+        $em->flush();
+
+        $team->removeUser($user);
+        $em->persist($user);
+        $em->flush();
+        
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        $message = \Swift_Message::newInstance()
+                    ->setSubject('Actualización TeamUp')
+                    ->setFrom('gestionIPre@ing.puc.cl')
+                    ->setTo(array($user->getEmail()))
+                    ->setBody('<html>' .
+                        ' <head></head>' .
+                        ' <body>' .
+                        'Hola, '.$currentUser->getFullName().' te ha elliminado del equipo. </br>'.
+                        'Esperamos que esto no sea un inconveniente para participar de nuestra hackathon, ingresa a <a href="http://www.maratonbigdata.cl">TeamUp</a> y busca tu nuevo equipo!' .
+                        '</br></br>'.
+                        '(No responda este email)</body>' .
+                        '</html>',
+                        'text/html')
+                ;
+        $this->get('mailer')->send($message);
+
+
+        return $this->redirectToRoute('team_users_edit', array('id' => $team->getId()));
+    }
+
 }

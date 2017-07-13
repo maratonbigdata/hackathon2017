@@ -3,6 +3,7 @@
 namespace TeamupBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Profile
@@ -41,6 +42,16 @@ class Profile
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
+
+    /**
+     * One Product has Many Features.
+     * @ORM\OneToMany(targetEntity="User", mappedBy="profile")
+     */
+    private $users;
+
+    public function __construct() {
+        $this->users = new ArrayCollection();
+    }
 
     /**
      * Get id

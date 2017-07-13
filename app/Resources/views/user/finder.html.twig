@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Postulantes</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Brief</th>
+                <th>Perfil</th>
+                <th>Email</th>
+                <th>Puntaje</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <div>
+                <h2>{{ user.name }} {{ user.lastname }}</h2>
+                <br>
+                <p>{{ user.brief }}</p>
+                <a href="" class="btn btn-success btn-sm" role="button">Invitar a mi grupo</a>
+                <a href="" class="btn btn-primary btn-sm" role="button">Enviar Mensaje</a>
+
+            </div>
+            <tr>
+                <td>{{ user.name }} {{ user.lastname }}</td>
+                <td>{{ user.brief }}</td>
+                <td>{{ user.profile.name }}</td>
+                <td>{{ user.email }}</td>
+                <th>
+                    {{ user.getMatchScore(currentUser) }}
+                </th>
+                <td>
+                    <td><a href="" class="btn btn-success btn-sm" role="button">Invitar a mi grupo</a></td>
+                    <td><a href="" class="btn btn-primary btn-sm" role="button">Enviar Mensaje</a></td>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

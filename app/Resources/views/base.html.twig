@@ -31,23 +31,34 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="/">Team Up <span class="glyphicon glyphicon-heart" aria-hidden="true"></span></a>
+              <a class="navbar-brand" href="{{ path('home') }}">Team Up <span class="glyphicon glyphicon-heart" aria-hidden="true"></span></a>
             </div>
-
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
-                <li><a href="{{path('team_index')}}">Mi Grupo</a></li>
-                <li><a href="{{path('user_index')}}">Buscar Postulantes</a></li>
+                {% if is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN')%}
+                    {% if app.user.hasTeam %}
+                        <li><a href="{{ path('team_show', { 'id': app.user.team.id }) }}">Mi Grupo</a></li>
+                    {% else %}
+                        <li><a href="{{ path('team_new')}}">Crear Grupo</a></li>
+                    {% endif %}
+                    {% if app.user.isSearching %}
+                        <li><a href="{{ path('users_finder') }}">Buscar Postulantes</a></li>
+                    {% endif %}
+                {% endif %}
               </ul>
 
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         {% if is_granted(['IS_AUTHENTICATED_FULLY', 'IS_AUTHENTICATED_REMEMBERED']) %}
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Usuario<span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{ app.user.name }} {{ app.user.lastname }} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Mi Perfil</a></li>
-                                <li><a href="#">Logout</a></li>
+                                <li><a href="{{ path('user_show', { 'id': app.user.id }) }}">Mi Perfil</a></li>
+                                <li><a href="{{path('logout')}}">Logout</a></li>
+
+                                {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                                    <li><a href="{{path('login_router', {'impersonate': '_exit'})}}">Dejar de personificar</a></li>
+                                {% endif %}
                             </ul>
                         {% else %}
                             <li><a href="{{path('login_route')}}">Log in</a></li> / <li><a href="{{path('signUp_route')}}">Sing up</a></li>

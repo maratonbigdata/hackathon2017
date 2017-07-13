@@ -108,10 +108,12 @@ class User implements AdvancedUserInterface, \Serializable
     private $restorer;
 
     /**
-     * One User has One Profile.
-     * @ORM\OneToOne(targetEntity="Profile", mappedBy="user")
+     * Many Users have One Profile.
+     * @ORM\ManyToOne(targetEntity="Profile", inversedBy="users")
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
      */
     private $profile;
+
 
     public function __construct() {
         $this->isActive = true;
@@ -243,6 +245,16 @@ class User implements AdvancedUserInterface, \Serializable
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Get full name
+     *
+     * @return string 
+     */
+    public function getFullName()
+    {
+        return $this->name." ".$this->lastname;
     }
 
     /**
@@ -434,6 +446,34 @@ class User implements AdvancedUserInterface, \Serializable
     }
 
     /**
+     * Bool if has a team
+     *
+     * @return boolean
+     */
+    public function hasTeam()
+    {
+        if(is_null($this->team))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Bool if has a team
+     *
+     * @return boolean
+     */
+    public function isSearching()
+    {
+        if(!is_null($this->team) && $this->team->getStatus != 1)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Add interests
      *
      * @param \TeamupBundle\Entity\Interest $interests
@@ -517,4 +557,21 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->role;
     }
+
+    /**
+     * Get match score
+     *
+     * @return integer 
+     */
+    public function getMatchScore($currentUser)
+    {
+        if($currentUser->getId() == $this->getId())
+            return 20;
+        if($currentUser->hasTeam())
+        {
+            return 10;
+        }
+        return 5;
+    }
+
 }

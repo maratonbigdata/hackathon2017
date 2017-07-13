@@ -34,18 +34,20 @@ class UserController extends Controller
     /**
      * Lists all user entities.
      *
-     * @Route("/", name="users_finder")
+     * @Route("/Matcher", name="users_finder")
      * @Method("GET")
      */
     public function findAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
         //$users = $em->getRepository('TeamupBundle:User')->wantedUsers();
         $users = $em->getRepository('TeamupBundle:User')->findAll();
 
-        return $this->render('user/index.html.twig', array(
+        return $this->render('user/finder.html.twig', array(
             'users' => $users,
+            'currentUser' => $currentUser,
         ));
     }
 

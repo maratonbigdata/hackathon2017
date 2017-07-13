@@ -156,6 +156,10 @@ class Team
                 return 'No Aceptado';
                 break;
 
+            case 5:
+                return 'Pendiente Confirmación Miembros ';
+                break;
+
             default:
                 return 'Buscando Miembros';
                 break;

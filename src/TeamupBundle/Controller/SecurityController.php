@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use TeamupBundle\Entity\User;
+use TeamupBundle\Entity\Restorer;
 use TeamupBundle\Form\UserType;
 
 class SecurityController extends Controller
@@ -63,7 +64,7 @@ class SecurityController extends Controller
 
 	    if(is_null($restorer))//we finished and redirect, no output
 	    {
-	    	return $this->redirectToRoute('backend_homepage');
+	    	return $this->redirectToRoute('home');
 	    }
 
 	    $user = $restorer->getUser();
@@ -89,7 +90,7 @@ class SecurityController extends Controller
             $em->remove($restorer);
             $em->flush();
 
-            return $this->redirectToRoute('backend_homepage');
+            return $this->redirectToRoute('home');
 	    }
 
 	    return $this->render(
@@ -256,8 +257,6 @@ class SecurityController extends Controller
         $form->handleRequest($request);
 
         echo var_dump($form->getErrorsAsString());
-
-        echo var_dump($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             try

@@ -1,16 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Team creation</h1>
+    <h1>Nuevo Equipo</h1>
 
     {{ form_start(form) }}
         {{ form_widget(form) }}
-        <input type="submit" value="Create" />
+        <input type="submit" class="btn btn-primary btn1" role="button" value="Crear"/>
     {{ form_end(form) }}
 
-    <ul>
-        <li>
-            <a href="{{ path('team_index') }}">Back to the list</a>
-        </li>
-    </ul>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('user_index') }}" class="btn btn-info btn2" role="button">Equipos</a>
+    {% endif %}
 {% endblock %}
