@@ -42,8 +42,18 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
-        //$users = $em->getRepository('TeamupBundle:User')->wantedUsers();
-        $users = $em->getRepository('TeamupBundle:User')->findAll();
+        $users = $em->getRepository('TeamupBundle:User')->wantedUsers();
+
+        $users_array = array();
+
+        foreach ($users as $user) 
+        {
+            array_push($users_array, {$user,$user->getMatchScore($currentUser)});
+        }
+
+
+
+        $teams = $em->getRepository('TeamupBundle:Team')->wantedTeams();
 
         return $this->render('user/finder.html.twig', array(
             'users' => $users,

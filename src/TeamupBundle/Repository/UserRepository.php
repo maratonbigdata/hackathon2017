@@ -16,9 +16,9 @@ class UserRepository extends EntityRepository
 	{
 		$query = $this->getEntityManager()
             ->createQuery(
-                'SELECT o FROM TeamupBundle:User u
-                JOIN u.team t
-                WHERE t.status = 1'
+                'SELECT u FROM TeamupBundle:User u
+                WHERE u.team IS NULL
+                '
             );
      
         try 

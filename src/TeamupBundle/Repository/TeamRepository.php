@@ -12,4 +12,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class TeamRepository extends EntityRepository
 {
+	public function wantedTeams()
+	{
+		$query = $this->getEntityManager()
+            ->createQuery(
+                'SELECT t FROM TeamupBundle:Team t
+                WHERE t.status = 1
+                '
+            );
+     
+        try 
+        {
+            return $query->getResult();
+        } 
+        catch (\Doctrine\ORM\NoResultException $e) 
+        {
+            return null;
+        }
+	}
 }
