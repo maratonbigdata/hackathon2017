@@ -42,22 +42,23 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
-        $users = $em->getRepository('TeamupBundle:User')->wantedUsers();
+        $users = $em->getRepository('TeamupBundle:User')->wantedUsers($currentUser);
 
         $users_array = array();
 
         foreach ($users as $user) 
         {
-            array_push($users_array, {$user,$user->getMatchScore($currentUser)});
+            array_push($users_array, array($user,$user->getMatchScore($currentUser)));
         }
 
-
+        usort($users_array, function ($a,$b){
+            return $b[1]-$a[1];
+        });
 
         $teams = $em->getRepository('TeamupBundle:Team')->wantedTeams();
 
         return $this->render('user/finder.html.twig', array(
-            'users' => $users,
-            'currentUser' => $currentUser,
+            'users_array' => $users_array,
         ));
     }
 

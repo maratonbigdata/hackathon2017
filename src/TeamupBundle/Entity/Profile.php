@@ -37,13 +37,6 @@ class Profile
     private $description;
 
     /**
-     * One Profile has One user.
-     * @ORM\OneToOne(targetEntity="User", inversedBy="profile")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
-    private $user;
-
-    /**
      * One Product has Many Features.
      * @ORM\OneToMany(targetEntity="User", mappedBy="profile")
      */
@@ -110,25 +103,35 @@ class Profile
     }
 
     /**
-     * Set user
+     * Add users
      *
-     * @param \TeamupBundle\Entity\User $user
+     * @param \TeamupBundle\Entity\User $users
      * @return Profile
      */
-    public function setUser(\TeamupBundle\Entity\User $user = null)
+    public function addUser(\TeamupBundle\Entity\User $users)
     {
-        $this->user = $user;
+        $this->users[] = $users;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Remove users
      *
-     * @return \TeamupBundle\Entity\User 
+     * @param \TeamupBundle\Entity\User $users
      */
-    public function getUser()
+    public function removeUser(\TeamupBundle\Entity\User $users)
     {
-        return $this->user;
+        $this->users->removeElement($users);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }

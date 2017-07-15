@@ -3,6 +3,7 @@
 namespace TeamupBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Interest
@@ -29,11 +30,14 @@ class Interest
     private $name;
 
     /**
-     * Many interests have One user.
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="interests")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * Many interests have many user.
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="interests")
      */
-    private $user;
+    private $users;
+
+    public function __construct() {
+        $this->users = new ArrayCollection();
+    }
 
     /**
      * Get id

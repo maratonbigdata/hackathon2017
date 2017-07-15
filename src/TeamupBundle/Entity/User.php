@@ -57,7 +57,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="brief", type="string", length=255, nullable=true)
+     * @ORM\Column(name="brief", type="text", length=300, nullable=true)
      */
     private $brief;
 
@@ -97,8 +97,9 @@ class User implements AdvancedUserInterface, \Serializable
     private $team;
 
     /**
-     * One User has Many Interest.
-     * @ORM\OneToMany(targetEntity="Interest", mappedBy="user")
+     * Many Users has Many Interest.
+     * @ORM\ManyToMany(targetEntity="Interest", inversedBy="users")
+     * @ORM\JoinTable(name="users_interests")
      */
     private $interests;
 
@@ -466,7 +467,7 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function isSearching()
     {
-        if(!is_null($this->team) && $this->team->getStatus != 1)
+        if(!is_null($this->team) && $this->team->getStatus() != 1)
         {
             return false;
         }
@@ -483,6 +484,11 @@ class User implements AdvancedUserInterface, \Serializable
     {
         $this->interests[] = $interests;
 
+        echo var_dump($interests);
+        die();
+
+        $interests->setUser($this);
+
         return $this;
     }
 
@@ -494,6 +500,8 @@ class User implements AdvancedUserInterface, \Serializable
     public function removeInterest(\TeamupBundle\Entity\Interest $interests)
     {
         $this->interests->removeElement($interests);
+
+        $interests->setUser(null);
     }
 
     /**
@@ -504,36 +512,6 @@ class User implements AdvancedUserInterface, \Serializable
     public function getInterests()
     {
         return $this->interests;
-    }
-
-    /**
-     * Set profile
-     *
-     * @param \TeamupBundle\Entity\Profile $profile
-     * @return User
-     */
-    public function setProfile(\TeamupBundle\Entity\Profile $profile = null)
-    {
-        $this->profile = $profile;
-
-        $profile->setUser($this);
-
-        return $this;
-    }
-
-    /**
-     * Get profile
-     *
-     * @return \TeamupBundle\Entity\Profile 
-     */
-    public function getProfile()
-    {
-        return $this->profile;
-    }
-
-    public function getRoles()
-    {
-        return array($this->role);
     }
 
     /**
@@ -548,6 +526,7 @@ class User implements AdvancedUserInterface, \Serializable
         $this->role = $role;
         return $this;
     }
+
     /**
      * Get role
      *
@@ -558,6 +537,11 @@ class User implements AdvancedUserInterface, \Serializable
         return $this->role;
     }
 
+    public function getRoles()
+    {
+        return array($this->role);
+    }
+
     /**
      * Get match score
      *
@@ -565,13 +549,65 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getMatchScore($currentUser)
     {
-        if($currentUser->getId() == $this->getId())
-            return 20;
-        if($currentUser->hasTeam())
+        $score = 0;
+        $team = $currentUser->getTeam();
+
+        $profile_score = 0;
+
+        foreach ($team->getNeededs() as $needed) 
         {
-            return 10;
+            if($this->getProfile()->getId() == $needed->getProfile()->getId())
+                $profile_score = 100;
         }
-        return 5;
+
+        $interests_score = 0;
+
+        $team_interests = array();
+
+        foreach ($team->getUsers() as $user) 
+        {
+            foreach ($user->getInterests() as $interest) 
+            {
+                array_push($team_interests,$interest->getId());
+            }
+        }
+
+        $user_interests = array();
+
+        foreach ($this->getInterests() as $interest) 
+        {
+            array_push($user_interests, $interest->getId());
+        }
+
+        $interests_score = floatval(count(array_intersect(array_unique($team_interests),$user_interests)))*100/floatval(count(array_unique($team_interests)));
+
+        //ponderar puntaje
+        $score = ($profile_score+$interests_score)/2;
+
+        return $score;
     }
 
+
+    /**
+     * Set profile
+     *
+     * @param \TeamupBundle\Entity\Profile $profile
+     * @return User
+     */
+    public function setProfile(\TeamupBundle\Entity\Profile $profile = null)
+    {
+        $this->profile = $profile;
+
+        return $this;
+    }
+
+    /**
+     * Get profile
+     *
+     * @return \TeamupBundle\Entity\Profile 
+     */
+    public function getProfile()
+    {
+        return $this->profile;
+    }
 }

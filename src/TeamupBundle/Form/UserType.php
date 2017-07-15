@@ -21,7 +21,7 @@ class UserType extends AbstractType
             ->add('lastname', null,array('label' => 'Apellido','attr' => array('class'=>'form-control')))
             ->add('rut', null,array('label' => 'Rut (sin puntos)', 'required' => true,'attr' => array('class'=>'form-control')))
             ->add('email', EmailType::class,array('label' => 'Email','attr' => array('class'=>'form-control')))
-            ->add('brief', null,array('label' => 'resumen','attr' => array('class'=>'form-control')))
+            ->add('brief', null,array('label' => 'Resumen Personal (por ejemplo: formación, experiencia y aporte al equipo)','attr' => array('class'=>'form-control')))
             ->add('profile', EntityType::class, array(
                 'label' => 'Perfil',
                 'attr' => array('class'=>'js-basic-single-profile'),
@@ -29,6 +29,14 @@ class UserType extends AbstractType
                 'placeholder' => 'Seleccione un perfil',
                 'class' => 'TeamupBundle:Profile',
                 'choice_label' => 'name',))
+            ->add('interests',EntityType::class, array(
+                'attr' => array('class'=>'checkboxes_list'),
+                'class' => 'TeamupBundle:Interest',
+                'choice_label' => 'name',
+                'expanded' => true,
+                'multiple' => true,
+                'label' => 'Áreas de Interés',
+                ))
         ;
     }
     

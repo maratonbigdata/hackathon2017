@@ -34,3 +34,17 @@ label {
   margin: 5px;
   margin-top: 30px;
 }
+
+.checkboxes_list input[type=checkbox] {
+  margin-right: 5px;
+  margin-left: 20px;
+}
+
+.checkboxes_list label {
+  display: inline;
+  font-weight: normal;
+}
+.checkboxes_list label:after { 
+  content:"\A"; 
+  white-space:pre; 
+}

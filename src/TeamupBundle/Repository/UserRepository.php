@@ -12,14 +12,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
-	public function wantedUsers()
+	public function wantedUsers($currentUser)
 	{
 		$query = $this->getEntityManager()
             ->createQuery(
                 'SELECT u FROM TeamupBundle:User u
-                WHERE u.team IS NULL
+                WHERE u.team IS NULL AND u.id != :currentUserId
                 '
-            );
+            )->setParameter('currentUserId', $currentUser->getId());
      
         try 
         {
