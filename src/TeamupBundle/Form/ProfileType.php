@@ -16,6 +16,7 @@ class ProfileType extends AbstractType
         $builder
             ->add('name', null,array('label' => 'Nombre','attr' => array('class'=>'form-control')))
             ->add('description', null,array('label' => 'Descripción','attr' => array('class'=>'form-control')))
+            ->add('icon', null,array('label' => 'Icono','attr' => array('class'=>'form-control')))
         ;
     }
     

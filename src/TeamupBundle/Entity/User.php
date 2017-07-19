@@ -610,4 +610,14 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->profile;
     }
+
+    /**
+     * Get profile icon
+     *
+     * @return string 
+     */
+    public function getIcon()
+    {
+        return $this->profile->getIconText();
+    }
 }

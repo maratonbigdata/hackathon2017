@@ -42,6 +42,13 @@ class Profile
      */
     private $users;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="icon", type="string", length=100)
+     */
+    private $icon;
+
     public function __construct() {
         $this->users = new ArrayCollection();
     }
@@ -133,5 +140,38 @@ class Profile
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Set icon
+     *
+     * @param string $icon
+     * @return Profile
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string 
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string 
+     */
+    public function getIconText()
+    {
+        return '<span class="glyphicon glyphicon-'.$this->icon.'" aria-hidden="true"></span>';
     }
 }
