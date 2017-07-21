@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Invitación</h1>
+
+    {{invitation.sender.getFullName}} le ha invitado a ser parte de su equipo <strong>{{invitation.sender.team.name}}</strong> con los siguientes integrantes:
+
+    <ul>
+        {% for user in invitation.sender.team.users %}
+            <li>{{user.getFullName}}</li>
+        {% endfor %}
+    </ul>    
+
+    {% if invitation.reciever.hasTeam %}
+        <em style="float:left;">**Basta con que un miembro de su grupo acepte para que todos sean agregados al nuevo grupo**</em>
+    {% endif %}
+
+    <small style="float:left;">La invitación fue enviada el {% if invitation.date %}{{ invitation.date|date('Y-m-d H:i:s') }}{% endif %}</small>
+
+    <a href="" class="btn btn-success btn1" role="button" >Unirse al grupo</a> <a href="" class="btn btn-danger btn1" role="button" >Declinar Invitación</a> 
+            
+{% endblock %}

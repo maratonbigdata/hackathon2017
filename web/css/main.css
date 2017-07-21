@@ -14,8 +14,7 @@ body {
     display: table-cell;
     vertical-align: middle;
     width: 1024px;
-    padding-top: 70px;
-    padding-bottom: 50px;
+    padding: 70px 5px 50px 5px;
 }
 
 label {
@@ -48,3 +47,147 @@ label {
   content:"\A"; 
   white-space:pre; 
 }
+
+/**************** Chat ********************/
+
+span.me
+{
+  border-radius: 100px;
+  background: #ffb300;
+  color : white;
+  padding : 8px 8px;
+}
+
+span.you
+{
+  border-radius: 100px;
+  background: #9c27b0;
+  color : white;
+  padding : 8px 8px;
+}
+
+.msg-container-me
+{
+  display: inline-block;
+  width: 100%;
+  padding-bottom: 8px;
+  text-align: right;
+  margin-top: 2px;
+}
+
+.msg-contanier-you
+{
+  display: inline-block;
+  width: 100%;
+  padding-bottom: 8px;
+  text-align: left;
+  margin-top: 2px;
+}
+
+.msg-content-me
+{
+  display: inline-block;
+  text-align: left;
+  max-width: 90%;
+}
+
+.msg-content-you
+{
+  display: inline-block;
+  text-align: right;
+  max-width: 90%;
+}
+
+.msg-content-you .panel, .msg-content-me .panel
+{
+  margin-bottom: 1px;
+}
+
+.msg-text
+{
+  text-align: left;
+  word-wrap: break-word;
+  padding: 5px;
+}
+
+.msg-time
+{
+  text-align: right;
+  font-size: 8px;
+}
+
+.msg-me
+{
+  text-align: right;
+  display: inline-block;
+  float: right;
+  padding-left: 3px;
+  margin-top: 6px;
+}
+
+.msg-you
+{
+  text-align: left;
+  display: inline-block;
+  float: left;
+  padding-right: 3px;
+  margin-top: 6px;
+}
+
+.chat-window
+{
+  height: 50%;
+}
+
+.chat-scrollable
+{
+  height:400px; 
+  overflow:auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

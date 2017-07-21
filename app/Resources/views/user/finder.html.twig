@@ -26,8 +26,8 @@
                             <span class="sr-only"></span>
                           </div>
                         </div>
-                        <a href="" class="btn btn-success btn-sm" role="button">Invitar a mi grupo</a>
-                        <a href="" class="btn btn-primary btn-sm" role="button">Enviar Mensaje</a>
+                        <a href="{{path('invite',{id: user.id})}}" class="btn btn-success btn-sm" role="button">Invitar a mi grupo</a>
+                        <a href="{{path('chat',{id: user.id})}}" target="_blank" class="btn btn-primary btn-sm" role="button">Enviar Mensaje</a>
                     </div>
                 </td>
             </tr>

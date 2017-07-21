@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Invitations list</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Invitado</th>
+                <th>Enviado el</th>
+                <th>State</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for invitation in invitations %}
+            <tr>
+                <td>{{invitation.reciever.getFullName}}</td>
+                <td>{% if invitation.date %}{{ invitation.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ invitation.getStateText }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('invitation_show', { 'id': invitation.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

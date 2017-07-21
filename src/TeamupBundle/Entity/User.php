@@ -115,6 +115,29 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $profile;
 
+    /**
+     * One User have Many Messages.
+     * @ORM\OneToMany(targetEntity="Message", mappedBy="sender")
+     */
+    private $sendedMessages;
+
+    /**
+     * One Users have Many Messages.
+     * @ORM\OneToMany(targetEntity="Message", mappedBy="reciever")
+     */
+    private $recievedMessages;
+
+    /**
+     * One User sent Many Invitations.
+     * @ORM\OneToMany(targetEntity="Invitation", mappedBy="sender")
+     */
+    private $sendedInvitations;
+
+    /**
+     * One User recieved Many Invitations.
+     * @ORM\OneToMany(targetEntity="Invitation", mappedBy="reciever")
+     */
+    private $recievedInvitations;
 
     public function __construct() {
         $this->isActive = true;
@@ -122,6 +145,10 @@ class User implements AdvancedUserInterface, \Serializable
         // $this->salt = md5(uniqid(null, true));
 
         $this->interests = new ArrayCollection();
+        $this->sendedMessages = new ArrayCollection();
+        $this->recievedMessages = new ArrayCollection();
+        $this->sendedInvitations = new ArrayCollection();
+        $this->recievedInvitations = new ArrayCollection();
     }
 
     public function getPlainPassword()
@@ -256,6 +283,16 @@ class User implements AdvancedUserInterface, \Serializable
     public function getFullName()
     {
         return $this->name." ".$this->lastname;
+    }
+
+    /**
+     * Get initials
+     *
+     * @return string 
+     */
+    public function getInitials()
+    {
+        return strtoupper(substr($this->name,0,1).substr($this->lastname,0,1));
     }
 
     /**
@@ -619,5 +656,137 @@ class User implements AdvancedUserInterface, \Serializable
     public function getIcon()
     {
         return $this->profile->getIconText();
+    }
+
+    /**
+     * Add sendedMessages
+     *
+     * @param \TeamupBundle\Entity\Message $sendedMessages
+     * @return User
+     */
+    public function addSendedMessage(\TeamupBundle\Entity\Message $sendedMessages)
+    {
+        $this->sendedMessages[] = $sendedMessages;
+
+        return $this;
+    }
+
+    /**
+     * Remove sendedMessages
+     *
+     * @param \TeamupBundle\Entity\Message $sendedMessages
+     */
+    public function removeSendedMessage(\TeamupBundle\Entity\Message $sendedMessages)
+    {
+        $this->sendedMessages->removeElement($sendedMessages);
+    }
+
+    /**
+     * Get sendedMessages
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSendedMessages()
+    {
+        return $this->sendedMessages;
+    }
+
+    /**
+     * Add recievedMessages
+     *
+     * @param \TeamupBundle\Entity\Message $recievedMessages
+     * @return User
+     */
+    public function addRecievedMessage(\TeamupBundle\Entity\Message $recievedMessages)
+    {
+        $this->recievedMessages[] = $recievedMessages;
+
+        return $this;
+    }
+
+    /**
+     * Remove recievedMessages
+     *
+     * @param \TeamupBundle\Entity\Message $recievedMessages
+     */
+    public function removeRecievedMessage(\TeamupBundle\Entity\Message $recievedMessages)
+    {
+        $this->recievedMessages->removeElement($recievedMessages);
+    }
+
+    /**
+     * Get recievedMessages
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRecievedMessages()
+    {
+        return $this->recievedMessages;
+    }
+
+    /**
+     * Add sendedInvitations
+     *
+     * @param \TeamupBundle\Entity\Invitation $sendedInvitations
+     * @return User
+     */
+    public function addSendedInvitation(\TeamupBundle\Entity\Invitation $sendedInvitations)
+    {
+        $this->sendedInvitations[] = $sendedInvitations;
+
+        return $this;
+    }
+
+    /**
+     * Remove sendedInvitations
+     *
+     * @param \TeamupBundle\Entity\Invitation $sendedInvitations
+     */
+    public function removeSendedInvitation(\TeamupBundle\Entity\Invitation $sendedInvitations)
+    {
+        $this->sendedInvitations->removeElement($sendedInvitations);
+    }
+
+    /**
+     * Get sendedInvitations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSendedInvitations()
+    {
+        return $this->sendedInvitations;
+    }
+
+    /**
+     * Add recievedInvitations
+     *
+     * @param \TeamupBundle\Entity\Invitation $recievedInvitations
+     * @return User
+     */
+    public function addRecievedInvitation(\TeamupBundle\Entity\Invitation $recievedInvitations)
+    {
+        $this->recievedInvitations[] = $recievedInvitations;
+
+        return $this;
+    }
+
+    /**
+     * Remove recievedInvitations
+     *
+     * @param \TeamupBundle\Entity\Invitation $recievedInvitations
+     */
+    public function removeRecievedInvitation(\TeamupBundle\Entity\Invitation $recievedInvitations)
+    {
+        $this->recievedInvitations->removeElement($recievedInvitations);
+    }
+
+    /**
+     * Get recievedInvitations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRecievedInvitations()
+    {
+        return $this->recievedInvitations;
     }
 }

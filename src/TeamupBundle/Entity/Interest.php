@@ -94,4 +94,37 @@ class Interest
     {
         return $this->user;
     }
+
+    /**
+     * Add users
+     *
+     * @param \TeamupBundle\Entity\User $users
+     * @return Interest
+     */
+    public function addUser(\TeamupBundle\Entity\User $users)
+    {
+        $this->users[] = $users;
+
+        return $this;
+    }
+
+    /**
+     * Remove users
+     *
+     * @param \TeamupBundle\Entity\User $users
+     */
+    public function removeUser(\TeamupBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
 }

@@ -5,7 +5,8 @@ namespace TeamupBundle\Controller;
 use TeamupBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * User controller.
@@ -165,5 +166,17 @@ class UserController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**                                                                                   
+     * @Route("/chat", name="add_chat_ajax")
+     */
+    public function addChatAction(Request $request)    
+    {
+        if ($request->isXMLHttpRequest()) {         
+            return new JsonResponse(array('data' => 'this is a json response'));
+        }
+
+        return new Response('This is not ajax!', 400);
     }
 }

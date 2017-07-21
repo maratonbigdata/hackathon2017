@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Chat con {{ user.getFullName() }}</h1>
+    <div class="chat-window">
+        <div class="chat-scrollable" id="chat-scrollable">
+            {% for message in messages %}
+                {% if message.sender.id == app.user.id%}
+                    <div class="msg-container-me">
+                        <div class="msg-content-me">
+                            <div class="panel panel-default">
+                                <div class="msg-text">
+                                    {{ message.msg }}
+                                </div>
+                            </div>
+                            <div class="msg-time">
+                                {% if message.sendedTimestamp %}Enviado: {{ message.sendedTimestamp|date('Y-m-d H:i:s') }}{% endif %}{% if message.readedTimestamp %} - Leído: {{ message.readedTimestamp|date('Y-m-d H:i:s') }}{% endif %}
+                            </div>
+                        </div>
+                        <div class="msg-me"><span class="me">{{ message.sender.getInitials() }}</span></div>
+                    </div>
+                    {% else %}
+                    <div class="msg-container-you">
+                        <div class="msg-you"><span class="you">{{ message.sender.getInitials() }}</span></div>
+                        <div class="msg-content-you">
+                            <div class="panel panel-default">
+                                <div class="msg-text">
+                                    {{ message.msg }}
+                                </div>
+                            </div>
+                            <div class="msg-time">
+                                {% if message.sendedTimestamp %}Enviado: {{ message.sendedTimestamp|date('Y-m-d H:i:s') }}{% endif %}{% if message.readedTimestamp %} - {{ message.readedTimestamp|date('Y-m-d H:i:s') }}{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input type="submit" style="float:right" class="btn btn-success btn-sm" role="button" value="Enviar"/>
+    {{ form_end(form) }}
+
+<script type="text/javascript"> 
+    var lastId = {{lastId}};
+    var refreshInterval = 5000;
+
+    window.setInterval(ajaxRequest, refreshInterval);
+
+    window.addEventListener("load", function(evt) {
+
+        $('form').submit( function( e ){
+            e.preventDefault();
+         
+            postForm( $(this), function( response ){
+            });
+         
+            return false;
+        });
+
+        $("#chat-scrollable").animate({ scrollTop: $('#chat-scrollable').prop("scrollHeight")}, 10);
+    })
+
+    function postForm( $form, callback ){
+    /*
+    * Get all form values
+    */
+    var values = {};
+    $.each( $form.serializeArray(), function(i, field) {
+    values[field.name] = field.value;
+    });
+
+    /*
+    * Throw the form values to the server!
+    */
+    $.ajax({
+        type        : $form.attr( 'method' ),
+        url         : $form.attr( 'action' ),
+        data        : values,
+        success     : function(data) {
+            callback( data );
+        }
+    });
+
+    ajaxRequest();
+    $('#teamupbundle_message_msg').val("");
+}
+
+    function addIncomingMessage(txt, time, initials)
+    {
+        //agregamos por dom
+        $('.chat-scrollable').append('<div class="msg-container-you">'+
+                        '<div class="msg-you"><span class="you">'+initials+'</span></div>'+
+                        '<div class="msg-content-you">'+
+                            '<div class="panel panel-default">'+
+                                '<div class="msg-text">'+
+                                    txt+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="msg-time">'+
+                                'Enviado: '+time+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'
+            );
+        //scroleamos para abajo
+        $("#chat-scrollable").animate({ scrollTop: $('#chat-scrollable').prop("scrollHeight")}, 100);
+    }    
+
+    function addSendedMessage(txt, time, initials)
+    {
+        $('.chat-scrollable').append('<div class="msg-container-me">'+
+                        '<div class="msg-content-me">'+
+                            '<div class="panel panel-default">'+
+                                '<div class="msg-text">'+
+                                    txt+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="msg-time">'+
+                                'Enviado: '+time+
+                            '</div>'+
+                        '</div>'+
+                        '<div class="msg-me"><span class="me">'+initials+'</span></div>'
+        );
+        $("#chat-scrollable").animate({ scrollTop: $('#chat-scrollable').prop("scrollHeight")}, 100);
+    }
+
+    function ajaxRequest(){
+    $.post('{{path('message_index')}}ajax/'+lastId+'/'+{{user.id}}+'/update_messages',               
+                { }, 
+            function(response){
+                jQuery.each( response, function( i, message ) {
+                    if(message.id > lastId)
+                    {
+                        if(message.sender == 1)
+                        {
+                            addSendedMessage(message.txt, message.time, message.initials);
+                        }
+                        else
+                        {
+                            addIncomingMessage(message.txt, message.time, message.initials)
+                        }
+                        lastId = message.id;
+                    }
+                });
+        }, "json");    
+    };
+
+
+    $('#teamupbundle_message_msg').keypress(function(e)
+    {
+        if(e.keyCode == 13 && $('#teamupbundle_message_msg').val().length > 0)
+        {
+            $('#teamupbundle_message_msg').submit();
+        }
+    });
+
+</script>
+
+{% endblock %}
