@@ -12,4 +12,29 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvitationRepository extends EntityRepository
 {
+	public function findOthersOfSameRecieverTeam($invitation)
+	{
+        $senderId = $invitation->getSender()->getId();
+        $recieverId = $invitation->getReciever()->getId();
+
+		$query = $this->getEntityManager()
+            ->createQuery(
+                'SELECT i FROM TeamupBundle:Invitation i
+                JOIN i.reciever r
+                JOIN i.sender s
+                JOIN r.team t
+                JOIN t.user u
+                WHERE u.id = r.id AND s.id = :senderId AND r.id = :recieverId
+                '
+            )->setParameters(array('senderId' => $senderId, 'recieverId' => $recieverId) );
+     
+        try 
+        {
+            return $query->getResult();
+        } 
+        catch (\Doctrine\ORM\NoResultException $e) 
+        {
+            return null;
+        }
+	}
 }

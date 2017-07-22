@@ -309,4 +309,35 @@ class TeamController extends Controller
         return $this->redirectToRoute('team_users_edit', array('id' => $team->getId()));
     }
 
+    /**
+     * Lists all teams incomplete.
+     *
+     * @Route("/TeamsMatcher", name="teams_finder")
+     * @Method("GET")
+     */
+    public function findAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        $users = $em->getRepository('TeamupBundle:User')->wantedUsers($currentUser);
+
+        $users_array = array();
+
+        foreach ($users as $user) 
+        {
+            array_push($users_array, array($user,$user->getMatchScore($currentUser)));
+        }
+
+        usort($users_array, function ($a,$b){
+            return $b[1]-$a[1];
+        });
+
+        $teams = $em->getRepository('TeamupBundle:Team')->wantedTeams();
+
+        return $this->render('team/finder.html.twig', array(
+            'users_array' => $users_array,
+        ));
+    }    
+
 }

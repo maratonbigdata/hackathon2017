@@ -3,20 +3,54 @@
 {% block body %}
     <h1>Invitación</h1>
 
-    {{invitation.sender.getFullName}} le ha invitado a ser parte de su equipo <strong>{{invitation.sender.team.name}}</strong> con los siguientes integrantes:
+    {% if invitation.sender.id == app.user.id %}
+        {% if invitation.reciever.hasTeam %}
+            Has invitado a {{invitation.reciever.team.name}} a ser parte de <strong>{{invitation.sender.team.name}}</strong>, ellos cuentan con los siguientes integrantes:
 
-    <ul>
-        {% for user in invitation.sender.team.users %}
-            <li>{{user.getFullName}}</li>
-        {% endfor %}
-    </ul>    
+            <ul>
+                {% for user in invitation.reciever.team.users %}
+                    <li>{{user.getFullName}}</li>
+                {% endfor %}
+            </ul>    
 
-    {% if invitation.reciever.hasTeam %}
-        <em style="float:left;">**Basta con que un miembro de su grupo acepte para que todos sean agregados al nuevo grupo**</em>
+            Estado de la invitación: {{invitation.getStateText}}<br><br>
+
+            <small style="float:left;">La invitación fue enviada el {% if invitation.date %}{{ invitation.date|date('Y-m-d H:i:s') }}{% endif %}</small>
+
+        {% else %}
+            Has invitado a {{invitation.reciever.getFullName}} a ser parte de <strong>{{invitation.sender.team.name}}</strong>.<br>
+
+            Estado de la invitación: {{invitation.getStateText}}<br><br>
+
+            <small style="float:left;">La invitación fue enviada el {% if invitation.date %}{{ invitation.date|date('Y-m-d H:i:s') }}{% endif %}</small>
+
+        {% endif %}
+
+        {% if invitation.state == 3 %}
+            <a href="{{path('change_state', { 'id': invitation.id, 'state': 4 } ) }}" class="btn btn-success btn1" role="button" >Volver a invitar</a> 
+        {% endif %}
+
+    {% else %}
+        {{invitation.sender.getFullName}} le ha invitado a ser parte de su equipo <strong>{{invitation.sender.team.name}}</strong> con los siguientes integrantes:
+
+        <ul>
+            {% for user in invitation.sender.team.users %}
+                <li>{{user.getFullName}}</li>
+            {% endfor %}
+        </ul>    
+
+        {% if invitation.reciever.hasTeam %}
+            <em style="float:left;">**Basta con que un miembro de su grupo acepte para que todos sean agregados al nuevo grupo**</em><br><br>
+        {% endif %}
+
+        Estado de la invitación: {{invitation.getStateText}}<br><br>
+
+        <small style="float:left;">La invitación fue enviada el {% if invitation.date %}{{ invitation.date|date('Y-m-d H:i:s') }}{% endif %}</small>
+
+        {% if invitation.state == 1 or invitation.state == 4 %}
+            <a href="{{path('change_state', { 'id': invitation.id, 'state': 2 } ) }}" class="btn btn-success btn1" role="button" >Unirse al grupo</a> 
+            <a href="{{path('change_state', { 'id': invitation.id, 'state': 3 } ) }}" class="btn btn-danger btn1" role="button" >Declinar Invitación</a> 
+        {% endif %}
     {% endif %}
-
-    <small style="float:left;">La invitación fue enviada el {% if invitation.date %}{{ invitation.date|date('Y-m-d H:i:s') }}{% endif %}</small>
-
-    <a href="" class="btn btn-success btn1" role="button" >Unirse al grupo</a> <a href="" class="btn btn-danger btn1" role="button" >Declinar Invitación</a> 
             
 {% endblock %}

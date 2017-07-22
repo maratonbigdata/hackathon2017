@@ -469,6 +469,7 @@ class User implements AdvancedUserInterface, \Serializable
     public function setTeam(\TeamupBundle\Entity\Team $team = null)
     {
         $this->team = $team;
+        $team->addUser($this);
 
         return $this;
     }

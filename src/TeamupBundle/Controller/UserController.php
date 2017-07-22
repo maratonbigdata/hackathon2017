@@ -35,7 +35,7 @@ class UserController extends Controller
     /**
      * Lists all user entities.
      *
-     * @Route("/Matcher", name="users_finder")
+     * @Route("/UsersMatcher", name="users_finder")
      * @Method("GET")
      */
     public function findAction()
