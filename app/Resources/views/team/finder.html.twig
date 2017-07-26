@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Postulantes</h1>
+    <h1>Equipos Postulantes</h1>
 
     <table class="table table-striped">
         <thead>
@@ -10,29 +10,53 @@
             </tr>
         </thead>
         <tbody>
-        {% for user_array in users_array %}
-            {% set user = user_array[0] %}
+        {% for team_array in teams_array %}
+            {% set team = team_array[0] %}
+            {% set users = team.users %}
             <tr>
                 <td>
                     <div>
                         <div style="display: inline-block;">
-                            <h3 style="display: inline-block;"><span class="glyphicon glyphicon glyphicon-{{user.profile.icon}}" aria-hidden="true"></span> {{ user.name }} {{ user.lastname }}</h3>
+                            <h3 style="display: inline-block;">
+                            	{{ team.name }}
+                            	{% for user in users %}
+                            		<span class="glyphicon glyphicon glyphicon-{{user.profile.icon}}" data-toggle="tooltip" data-placement="top" title="{{user.profile.name}}" aria-hidden="true"></span>
+                            	{% endfor %} 
+                            </h3>
                         </div>
-                        <p>{{ user.profile.name }}</p>
                         <br>
-                        <p>{{ user.brief }}</p>
+                        <p>{{ team.description }}</p>
                         <div class="progress">
-                          <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {{user_array[1]}}%">
+                          <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {{team_array[1]}}%">
                             <span class="sr-only"></span>
                           </div>
                         </div>
-                        <a href="{{path('invite',{id: user.id})}}" class="btn btn-success btn-sm" role="button">Invitar a mi grupo</a>
-                        <a href="{{path('chat',{id: user.id})}}" target="_blank" class="btn btn-primary btn-sm" role="button">Enviar Mensaje</a>
+                        <strong>Miembros actuales:</strong>
+                        <ul>
+                        {% for user in users %}
+                        	<li>
+                        		{{user.getFullName}} &nbsp;&nbsp;
+		                        <a href="{{path('chat',{id: user.id})}}" target="_blank" class="btn btn-sm btn-primary btn-sm" role="button">Enviar Mensaje</a>
+		                    </li>
+	                    {% endfor %}
+	                	</ul>
+	                	<strong>Areas de Interés:</strong> <br>
+	                	{% for interest in team.getInterestsArray %}
+                    		<button type="button" class="btn btn-default btn-xs">{{interest}}</button>
+	                    {% endfor %}
+	                    <br><br>
+                        <a href="" class="btn btn-success btn-sm" role="button">Pedir unirse al equipo</a>
                     </div>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
+<script>
+	$(document).ready(function(){
+	    $('[data-toggle="tooltip"]').tooltip(); 
+	});
+</script>
 
 {% endblock %}

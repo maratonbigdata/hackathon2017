@@ -32,7 +32,7 @@ class Team
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=255, unique=true)
+     * @ORM\Column(name="description", type="text", length=300, nullable=true)
      */
     private $description;
 
@@ -302,5 +302,86 @@ class Team
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Get interests
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInterestsArray()
+    {
+        $interests = array();
+        foreach ($this->users as $user) 
+        {
+            foreach ($user->getInterests() as $interest) 
+            {
+                array_push($interests, $interest->getName());
+            }
+        }
+        $interests = array_unique($interests);
+        return $interests;
+    }
+
+    /**
+     * Get match score (how much this fits to currentTeam)
+     *
+     * @return integer 
+     */
+    public function getMatchScore($currentTeam)
+    {
+        $score = 0;
+
+        $profile_team_score = 0;
+
+        $count = 0;
+
+        foreach ($currentTeam->getNeededs() as $needed) 
+        {
+            foreach ($this->getUsers() as $user) 
+            {
+                if($user->getProfile()->getId() == $needed->getProfile()->getId())
+                    $profile_team_score += 1;
+            }
+            $count += $needed->getQuantity();
+        }
+
+        if($count == 0)
+        {
+            $profile_team_score = 0;
+        }
+        else
+        {
+            $profile_team_score = floatval($profile_team_score) / floatval($count);
+        }
+
+        $interests_team_score = 0;
+
+        $this_team_interests = array();
+
+        foreach ($this->getUsers() as $user) 
+        {
+            foreach ($user->getInterests() as $interest) 
+            {
+                array_push($this_team_interests,$interest->getId());
+            }
+        }
+
+        $currentTeam_interests = array();
+
+        foreach ($currentTeam->getUsers() as $user) 
+        {
+            foreach ($user->getInterests() as $interest) 
+            {
+                array_push($currentTeam_interests,$interest->getId());
+            }
+        }
+
+        $interests_team_score = floatval(count(array_intersect(array_unique($currentTeam_interests),$this_team_interests)))*100/floatval(count(array_unique($currentTeam_interests)));
+
+        //ponderar puntaje
+        $score = ($profile_team_score+$interests_team_score)/2;
+
+        return $score;
     }
 }

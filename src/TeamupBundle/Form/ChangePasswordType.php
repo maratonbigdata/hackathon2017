@@ -18,8 +18,8 @@ class ChangePasswordType extends AbstractType
     {
         $builder->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
-                'first_options'  => array('label' => 'Contraseña/Password','attr' => array('disabled' => true, 'class'=>'form-control')),
-                'second_options' => array('label' => 'Repita Contraseña/Repeat Password','attr' => array('disabled' => true, 'class'=>'form-control')),
+                'first_options'  => array('label' => 'ContraseÃ±a','attr' => array('disabled' => true, 'class'=>'form-control')),
+                'second_options' => array('label' => 'Repita ContraseÃ±a','attr' => array('disabled' => true, 'class'=>'form-control')),
             ));
     }
 

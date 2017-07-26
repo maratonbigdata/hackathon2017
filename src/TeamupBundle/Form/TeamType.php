@@ -21,6 +21,7 @@ class TeamType extends AbstractType
             ->add('status', ChoiceType::class, array('label' => "Estado",'attr' => array('class'=>'form-control'),
                 'choices' => array('Buscando Miembros' => '1', 'Postulado' => '2', 'Aceptado' => '3', 'No Aceptado' => '4'),
                 'choices_as_values' => true))
+            ->add('description', null,array('label' => 'Resumen Proyecto (por ejemplo: ideas, metas y necesidades)','attr' => array('class'=>'form-control')))
             ->add('neededs',CollectionType::class, array(
                 'entry_type'    => NeededType::class,
                 'allow_add'     =>  true,

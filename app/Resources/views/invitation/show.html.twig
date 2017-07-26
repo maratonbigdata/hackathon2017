@@ -27,7 +27,7 @@
         {% endif %}
 
         {% if invitation.state == 3 %}
-            <a href="{{path('change_state', { 'id': invitation.id, 'state': 4 } ) }}" class="btn btn-success btn1" role="button" >Volver a invitar</a> 
+            <a href="{{path('change_invitation_state', { 'id': invitation.id, 'state': 4 } ) }}" class="btn btn-success btn1" role="button" >Volver a invitar</a> 
         {% endif %}
 
     {% else %}
@@ -48,8 +48,8 @@
         <small style="float:left;">La invitación fue enviada el {% if invitation.date %}{{ invitation.date|date('Y-m-d H:i:s') }}{% endif %}</small>
 
         {% if invitation.state == 1 or invitation.state == 4 %}
-            <a href="{{path('change_state', { 'id': invitation.id, 'state': 2 } ) }}" class="btn btn-success btn1" role="button" >Unirse al grupo</a> 
-            <a href="{{path('change_state', { 'id': invitation.id, 'state': 3 } ) }}" class="btn btn-danger btn1" role="button" >Declinar Invitación</a> 
+            <a href="{{path('change_invitation_state', { 'id': invitation.id, 'state': 2 } ) }}" class="btn btn-success btn1" role="button" >Unirse al grupo</a> 
+            <a href="{{path('change_invitation_state', { 'id': invitation.id, 'state': 3 } ) }}" class="btn btn-danger btn1" role="button" >Declinar Invitación</a> 
         {% endif %}
     {% endif %}
             

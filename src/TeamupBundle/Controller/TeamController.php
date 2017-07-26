@@ -36,6 +36,35 @@ class TeamController extends Controller
     }
 
     /**
+     * Lists all team entities.
+     *
+     * @Route("/TeamMatcher", name="teams_finder")
+     * @Method("GET")
+     */
+    public function finderAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        $teams = $em->getRepository('TeamupBundle:Team')->wantedTeams($currentUser);
+
+        $teams_array = array();
+
+        foreach ($teams as $team) 
+        {
+            array_push($teams_array, array($team,$team->getMatchScore($currentUser->getTeam())));
+        }
+
+        usort($teams_array, function ($a,$b){
+            return $b[1]-$a[1];
+        });
+
+        return $this->render('team/finder.html.twig', array(
+            'teams_array' => $teams_array,
+        ));
+    }
+
+    /**
      * Creates a new team entity.
      *
      * @Route("/new", name="team_new")
@@ -66,7 +95,10 @@ class TeamController extends Controller
                 $em->flush();
             }
             $team->setModified(new \DateTime());
-            // add current user $team->addUser()
+            if(strcmp($currentUser->getRole(), "ROLE_ADMIN") != 0) //si no es admin
+            {
+                $currentUser->setTeam($team);
+            }
             $em->persist($team);
             $em->flush();
 
@@ -308,36 +340,4 @@ class TeamController extends Controller
 
         return $this->redirectToRoute('team_users_edit', array('id' => $team->getId()));
     }
-
-    /**
-     * Lists all teams incomplete.
-     *
-     * @Route("/TeamsMatcher", name="teams_finder")
-     * @Method("GET")
-     */
-    public function findAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-
-        $users = $em->getRepository('TeamupBundle:User')->wantedUsers($currentUser);
-
-        $users_array = array();
-
-        foreach ($users as $user) 
-        {
-            array_push($users_array, array($user,$user->getMatchScore($currentUser)));
-        }
-
-        usort($users_array, function ($a,$b){
-            return $b[1]-$a[1];
-        });
-
-        $teams = $em->getRepository('TeamupBundle:Team')->wantedTeams();
-
-        return $this->render('team/finder.html.twig', array(
-            'users_array' => $users_array,
-        ));
-    }    
-
 }

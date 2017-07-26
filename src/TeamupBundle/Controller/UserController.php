@@ -43,6 +43,20 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
+        if(!$currentUser->hasTeam())
+        {
+            $this->addFlash(
+                'notice',
+                array(
+                    'alert' => 'danger',// danger, warning, info, success
+                    'title' => 'No pertenece a un equipo: ',
+                    'message' => 'Debe crear o unirse a un equipo antes de buscar e invitar otros usuarios'
+                )
+            );
+            
+            return $this->redirectToRoute('team_new');
+        }
+
         $users = $em->getRepository('TeamupBundle:User')->wantedUsers($currentUser);
 
         $users_array = array();
@@ -55,8 +69,6 @@ class UserController extends Controller
         usort($users_array, function ($a,$b){
             return $b[1]-$a[1];
         });
-
-        $teams = $em->getRepository('TeamupBundle:Team')->wantedTeams();
 
         return $this->render('user/finder.html.twig', array(
             'users_array' => $users_array,

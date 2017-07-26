@@ -2,75 +2,71 @@
 
 namespace TeamupBundle\Controller;
 
-use TeamupBundle\Entity\Invitation;
+use TeamupBundle\Entity\Petition;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use TeamupBundle\Entity\User;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Invitation controller.
+ * Petition controller.
  *
- * @Route("invitation")
+ * @Route("petition")
  */
-class InvitationController extends Controller
+class PetitionController extends Controller
 {
     /**
-     * Lists all invitation entities.
+     * Lists all petition entities.
      *
-     * @Route("/", name="invitation_index")
+     * @Route("/", name="petition_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        $petitions = $em->getRepository('TeamupBundle:Petition')->findAll();
 
-        $invitations = $em->getRepository('TeamupBundle:Invitation')->findBySender($currentUser);
-
-        return $this->render('invitation/index.html.twig', array(
-            'invitations' => $invitations,
+        return $this->render('petition/index.html.twig', array(
+            'petitions' => $petitions,
         ));
     }
 
     /**
-     * Creates a new invitation entity.
+     * Creates a new petition entity.
      *
-     * @Route("/{id}/new", name="invite")
+     * @Route("/{id}/new", name="ask")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request, User $user)
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        $invitation = new Invitation();
+        $petition = new Petition();
 
-        $invitation->setSender($currentUser);
-        $invitation->setReciever($user);
-        $invitation->setDate(new \DateTime());
-        $invitation->setState(1);
+        $petition->setSender($currentUser);
+        $petition->setReciever($user);
+        $petition->setDate(new \DateTime());
+        $petition->setState(1);
 
         $em = $this->getDoctrine()->getManager();
-        $em->persist($invitation);
+        $em->persist($petition);
         $em->flush();
 
         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-        $url = $baseurl.'/invitation/'.$invitation->getId();
+        $url = $baseurl.'/petition/'.$petition->getId();
 
         if($user->hasTeam())
         {
             foreach ($user->getTeam()->getUsers() as $member) 
             {
                 $message = \Swift_Message::newInstance()
-                ->setSubject('Les han invitado a un equipo!')
+                ->setSubject('Les han solicitado unirse a su equipo!')
                 ->setFrom('gestionIPre@ing.puc.cl')
                 ->setTo(array($member->getEmail()))
                 ->setBody('<html>' .
                     ' <head></head>' .
                     ' <body>' .
-                    ' Hola, se les ha invitado a unirse a un equipo. <br>Para ver la invitaci√≥n, haga cl√≠ck <a href="'.$url.'">aqu√≠</a><br><br>'.
-                    'Recuerden que basta con que un miembro acepte la invitaci√≥n para unir los equipos<br><br>'.
+                    ' Hola, un participante les ha solicitado a unirse a su equipo. <br>Para ver la solicitud, haga clÌck <a href="'.$url.'">aquÌ</a><br><br>'.
+                    'Recuerden que basta con que un miembro acepte la peticiÛn<br><br>'.
                     ' TeamUp'.
                     '</html>',
                     'text/html')
@@ -87,7 +83,7 @@ class InvitationController extends Controller
                 ->setBody('<html>' .
                     ' <head></head>' .
                     ' <body>' .
-                    ' Hola, se le ha invitado a unirse a un equipo. <br>Para ver la invitaci√≥n, haga cl√≠ck <a href="'.$url.'">aqu√≠</a><br><br>'.
+                    ' Hola, un participante le ha solicitado a unirse a un equipo. <br>Para ver la solicitud, haga clÌck <a href="'.$url.'">aquÌ</a><br><br>'.
                     ' TeamUp'.
                     '</html>',
                     'text/html')
@@ -95,62 +91,62 @@ class InvitationController extends Controller
             $this->get('mailer')->send($message);
         }
 
-        return $this->redirectToRoute('invitation_index');
+        return $this->redirectToRoute('petition_index');
     }
 
     /**
-     * Finds and displays a invitation entity.
+     * Finds and displays a petition entity.
      *
-     * @Route("/{id}", name="invitation_show")
+     * @Route("/{id}", name="petition_show")
      * @Method("GET")
      */
-    public function showAction(Invitation $invitation)
+    public function showAction(Petition $petition)
     {
 
-        return $this->render('invitation/show.html.twig', array(
-            'invitation' => $invitation,
+        return $this->render('petition/show.html.twig', array(
+            'petition' => $petition,
         ));
     }
 
     /**
-     * Changes invitation state.
+     * Changes petition state.
      *
-     * @Route("/{id}/{state}/state", name="change_invitation_state")
+     * @Route("/{id}/{state}/state", name="change_petition_state")
      * @Method("GET")
      */
-    public function changeStateAction(Request $request, Invitation $invitation, $state)
+    public function changeStateAction(Request $request, Petition $petition, $state)
     {
-        if($invitation->getState() == $state || $state == 1)
+        /*if($petition->getState() == $state || $state == 1)
         {
-            return $this->redirectToRoute('invitation_show', array('id' => $invitation->getId()));    
-        }
+            return $this->redirectToRoute('petition_show', array('id' => $petition->getId()));    
+        }*/
         
         $em = $this->getDoctrine()->getManager();
-        $invitation->setState($state);
-        $em->persist($invitation);
+        $petition->setState($state);
+        $em->persist($petition);
         $em->flush();
 
-        $team = $invitation->getSender()->GetTeam();
+        $team = $petition->getSender()->GetTeam();
 
-        if($invitation->getReciever()->hasTeam())
+        if($petition->getReciever()->hasTeam())
         {
-            $invitationsTeam = $em->getRepository('TeamupBundle:Invitation')->findOthersOfSameRecieverTeam($invitation);
+            $petitionsTeam = $em->getRepository('TeamupBundle:Petition')->findOthersOfSameRecieverTeam($petition);
 
-            foreach ($invitationsTeam as $invitationTeam) 
+            foreach ($petitionsTeam as $petitionTeam) 
             {
-                $invitationTeam->setState($state);
-                $em->persist($invitationTeam);
+                $petitionTeam->setState($state);
+                $em->persist($petitionTeam);
                 $em->flush();
             }
         }
 
-        switch ($invitation->getState())
+        switch ($petition->getState())
         {
             case 2: //aceptada
-                //acciones invitados
-                if($invitation->getReciever()->hasTeam())
+                //acciones preguntados
+                if($petition->getReciever()->hasTeam())
                 {
-                    foreach ($invitation->getReciever()->getTeam()->getUsers() as $member) 
+                    foreach ($petition->getReciever()->getTeam()->getUsers() as $member) 
                     {
                         //agregar al equipo
                         $member->setTeam($team);
@@ -167,7 +163,7 @@ class InvitationController extends Controller
                             ->setBody('<html>' .
                                 ' <head></head>' .
                                 ' <body>' .
-                                ' Hola, '.$invitation->getReciever()->getFullName().' ha aceptado la invitaci√≥n para unirse a '.$team->getName().', todos los miembros de su equipo anterior se han unido al nuevo equipo. <br>Para ver el nuevo equipo, haga cl√≠ck <a href="'.$url.'">aqu√≠</a><br><br>'.
+                                ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la invitaciÛn para unirse a '.$team->getName().', todos los miembros de su equipo anterior se han unido al nuevo equipo. <br>Para ver el nuevo equipo, haga clÌck <a href="'.$url.'">aquÌ</a><br><br>'.
                                 ' TeamUp'.
                                 '</html>',
                                 'text/html')
@@ -178,27 +174,27 @@ class InvitationController extends Controller
                 else
                 {
                     //agregar al equipo
-                    $invitation->getReciever()->setTeam($team);
-                    $em->persist($invitation);
+                    $petition->getReciever()->setTeam($team);
+                    $em->persist($petition);
                     $em->flush();
                 }
 
                 //acciones invitadores
-                foreach ($invitation->getSender()->getTeam()->getUsers() as $user) 
+                foreach ($petition->getSender()->getTeam()->getUsers() as $user) 
                 {
-                    if($invitation->getReciever()->hasTeam())
+                    if($petition->getReciever()->hasTeam())
                     {
                         //enviar email
                         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
                         $url = $baseurl.'/team/'.$team->getId();
                         $message = \Swift_Message::newInstance()
-                            ->setSubject('Han aceptado tu invitaci√≥n!')
+                            ->setSubject('Han aceptado tu invitaciÛn!')
                             ->setFrom('gestionIPre@ing.puc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
                                 ' <body>' .
-                                ' Hola, '.$invitation->getReciever()->getFullName().' ha aceptado la invitaci√≥n de '.$invitation->getSender()->getFullName().' para unirse a '.$team->getName().'. Todos los miembros de tu equipo se han unido a su equipo. <br>Para ver el equipo, haga cl√≠ck <a href="'.$url.'">aqu√≠</a><br><br>'.
+                                ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la invitaciÛn de '.$petition->getSender()->getFullName().' para unirse a '.$team->getName().'. Todos los miembros de tu equipo se han unido a su equipo. <br>Para ver el equipo, haga clÌck <a href="'.$url.'">aquÌ</a><br><br>'.
                                 ' TeamUp'.
                                 '</html>',
                                 'text/html')
@@ -211,13 +207,13 @@ class InvitationController extends Controller
                         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
                         $url = $baseurl.'/team/'.$team->getId();
                         $message = \Swift_Message::newInstance()
-                            ->setSubject('Han aceptado tu invitaci√≥n!')
+                            ->setSubject('Han aceptado tu invitaciÛn!')
                             ->setFrom('gestionIPre@ing.puc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
                                 ' <body>' .
-                                ' Hola, '.$invitation->getReciever()->getFullName().' ha aceptado la invitaci√≥n de '.$invitation->getSender()->getFullName().' para unirse a '.$team->getName().'y ha sido agregado al equipo. <br>Para ver el equipo, haga cl√≠ck <a href="'.$url.'">aqu√≠</a><br><br>'.
+                                ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la invitaciÛn de '.$petition->getSender()->getFullName().' para unirse a '.$team->getName().'y ha sido agregado al equipo. <br>Para ver el equipo, haga clÌck <a href="'.$url.'">aquÌ</a><br><br>'.
                                 ' TeamUp'.
                                 '</html>',
                                 'text/html')
@@ -228,21 +224,21 @@ class InvitationController extends Controller
                 break;
             case 3: //rechazada
                 //enviar email de rechazo
-                foreach ($invitation->getSender()->getTeam()->getUsers() as $user) 
+                foreach ($petition->getSender()->getTeam()->getUsers() as $user) 
                 {
-                    if($invitation->getReciever()->hasTeam())
+                    if($petition->getReciever()->hasTeam())
                     {
                         //enviar email
                         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
                         $url = $baseurl.'/team/'.$team->getId();
                         $message = \Swift_Message::newInstance()
-                            ->setSubject('Han rechazado tu invitaci√≥n!')
+                            ->setSubject('Han rechazado tu invitaciÛn!')
                             ->setFrom('gestionIPre@ing.puc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
                                 ' <body>' .
-                                ' Hola, '.$invitation->getReciever()->getFullName().' ha rechazado la invitaci√≥n de '.$invitation->getSender()->getFullName().' para unirse a '.$team->getName().'. Ning√∫n miembros de su equipo se han unido al suyo.<br>Para ver el equipo, haga cl√≠ck <a href="'.$url.'">aqu√≠</a><br><br>'.
+                                ' Hola, '.$petition->getReciever()->getFullName().' ha rechazado la invitaciÛn de '.$petition->getSender()->getFullName().' para unirse a '.$team->getName().'. Ning˙n miembros de su equipo se han unido al suyo.<br>Para ver el equipo, haga clÌck <a href="'.$url.'">aquÌ</a><br><br>'.
                                 ' TeamUp'.
                                 '</html>',
                                 'text/html')
@@ -255,13 +251,13 @@ class InvitationController extends Controller
                         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
                         $url = $baseurl.'/team/'.$team->getId();
                         $message = \Swift_Message::newInstance()
-                            ->setSubject('Han aceptado tu invitaci√≥n!')
+                            ->setSubject('Han aceptado tu invitaciÛn!')
                             ->setFrom('gestionIPre@ing.puc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
                                 ' <body>' .
-                                ' Hola, '.$invitation->getReciever()->getFullName().' ha rechazado la invitaci√≥n de '.$invitation->getSender()->getFullName().' para unirse a '.$team->getName().'. <br>Para ver el equipo, haga cl√≠ck <a href="'.$url.'">aqu√≠</a><br><br>'.
+                                ' Hola, '.$petition->getReciever()->getFullName().' ha rechazado la invitaciÛn de '.$petition->getSender()->getFullName().' para unirse a '.$team->getName().'. <br>Para ver el equipo, haga clÌck <a href="'.$url.'">aquÌ</a><br><br>'.
                                 ' TeamUp'.
                                 '</html>',
                                 'text/html')
@@ -272,13 +268,13 @@ class InvitationController extends Controller
                 break;
             case 4: //re enviada
                 //acciones invitados
-                if($invitation->getReciever()->hasTeam())
+                if($petition->getReciever()->hasTeam())
                 {
-                    foreach ($invitation->getReciever()->getTeam()->getUsers() as $member) 
+                    foreach ($petition->getReciever()->getTeam()->getUsers() as $member) 
                     {
                         //enviar email
                         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-                        $url = $baseurl.'/invitation/'.$invitation->getId();
+                        $url = $baseurl.'/petition/'.$petition->getId();
                         $message = \Swift_Message::newInstance()
                             ->setSubject('Te han vuelto a invitar a un equipo!')
                             ->setFrom('gestionIPre@ing.puc.cl')
@@ -286,7 +282,7 @@ class InvitationController extends Controller
                             ->setBody('<html>' .
                                 ' <head></head>' .
                                 ' <body>' .
-                                ' Hola, '.$invitation->getReciever()->getFullName().' ha aceptado la invitaci√≥n para unirse a '.$team->getName().', basta con que uno de los miembros de tu actual equipo acepte para que todos los miembros de tu equipo anterior sean unido al nuevo equipo. <br>Para ver la invitaci√≥n, haga cl√≠ck <a href="'.$url.'">aqu√≠</a><br><br>'.
+                                ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la invitaciÛn para unirse a '.$team->getName().', basta con que uno de los miembros de tu actual equipo acepte para que todos los miembros de tu equipo anterior sean unido al nuevo equipo. <br>Para ver la invitaciÛn, haga clÌck <a href="'.$url.'">aquÌ</a><br><br>'.
                                 ' TeamUp'.
                                 '</html>',
                                 'text/html')
@@ -298,7 +294,7 @@ class InvitationController extends Controller
                 {
                     //agregar al equipo
                     $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-                    $url = $baseurl.'/invitation/'.$invitation->getId();
+                    $url = $baseurl.'/petition/'.$petition->getId();
                     $message = \Swift_Message::newInstance()
                         ->setSubject('Te han vuelto a invitar a un equipo!')
                         ->setFrom('gestionIPre@ing.puc.cl')
@@ -306,7 +302,7 @@ class InvitationController extends Controller
                         ->setBody('<html>' .
                             ' <head></head>' .
                             ' <body>' .
-                            ' Hola, '.$invitation->getReciever()->getFullName().' ha aceptado la invitaci√≥n para unirse a '.$team->getName().'. <br>Para ver la invitaci√≥n, haga cl√≠ck <a href="'.$url.'">aqu√≠</a><br><br>'.
+                            ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la invitaciÛn para unirse a '.$team->getName().'. <br>Para ver la invitaciÛn, haga clÌck <a href="'.$url.'">aquÌ</a><br><br>'.
                             ' TeamUp'.
                             '</html>',
                             'text/html')
@@ -316,6 +312,6 @@ class InvitationController extends Controller
                 break;
         }
 
-        return $this->redirectToRoute('invitation_show', array('id' => $invitation->getId()));
+        return $this->redirectToRoute('petition_show', array('id' => $petition->getId()));
     }
 }

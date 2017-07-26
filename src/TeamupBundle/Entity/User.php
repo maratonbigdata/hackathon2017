@@ -139,6 +139,18 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $recievedInvitations;
 
+    /**
+     * One User sent Many Petitions.
+     * @ORM\OneToMany(targetEntity="Petition", mappedBy="sender")
+     */
+    private $sendedPetitions;
+
+    /**
+     * One User recieved Many Petitions.
+     * @ORM\OneToMany(targetEntity="Petition", mappedBy="reciever")
+     */
+    private $recievedPetitions;
+
     public function __construct() {
         $this->isActive = true;
         // may not be needed, see section on salt below
@@ -149,6 +161,8 @@ class User implements AdvancedUserInterface, \Serializable
         $this->recievedMessages = new ArrayCollection();
         $this->sendedInvitations = new ArrayCollection();
         $this->recievedInvitations = new ArrayCollection();
+        $this->sendedPetitions = new ArrayCollection();
+        $this->recievedPetitions = new ArrayCollection();
     }
 
     public function getPlainPassword()
@@ -789,5 +803,71 @@ class User implements AdvancedUserInterface, \Serializable
     public function getRecievedInvitations()
     {
         return $this->recievedInvitations;
+    }
+
+    /**
+     * Add sendedPetitions
+     *
+     * @param \TeamupBundle\Entity\Petition $sendedPetitions
+     * @return User
+     */
+    public function addSendedPetition(\TeamupBundle\Entity\Petition $sendedPetitions)
+    {
+        $this->sendedPetitions[] = $sendedPetitions;
+
+        return $this;
+    }
+
+    /**
+     * Remove sendedPetitions
+     *
+     * @param \TeamupBundle\Entity\Petition $sendedPetitions
+     */
+    public function removeSendedPetition(\TeamupBundle\Entity\Petition $sendedPetitions)
+    {
+        $this->sendedPetitions->removeElement($sendedPetitions);
+    }
+
+    /**
+     * Get sendedPetitions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSendedPetitions()
+    {
+        return $this->sendedPetitions;
+    }
+
+    /**
+     * Add recievedPetitions
+     *
+     * @param \TeamupBundle\Entity\Petition $recievedPetitions
+     * @return User
+     */
+    public function addRecievedPetition(\TeamupBundle\Entity\Petition $recievedPetitions)
+    {
+        $this->recievedPetitions[] = $recievedPetitions;
+
+        return $this;
+    }
+
+    /**
+     * Remove recievedPetitions
+     *
+     * @param \TeamupBundle\Entity\Petition $recievedPetitions
+     */
+    public function removeRecievedPetition(\TeamupBundle\Entity\Petition $recievedPetitions)
+    {
+        $this->recievedPetitions->removeElement($recievedPetitions);
+    }
+
+    /**
+     * Get recievedPetitions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRecievedPetitions()
+    {
+        return $this->recievedPetitions;
     }
 }

@@ -12,15 +12,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class TeamRepository extends EntityRepository
 {
-	public function wantedTeams()
+	public function wantedTeams($currentUser)
 	{
 		$query = $this->getEntityManager()
             ->createQuery(
                 'SELECT t FROM TeamupBundle:Team t
-                WHERE t.status = 1
+                WHERE t.status = 1 AND t.id != :currentId
                 '
-            );
-     
+            )->setParameter('currentId', $currentUser->getTeam()->getId() );
+    
         try 
         {
             return $query->getResult();

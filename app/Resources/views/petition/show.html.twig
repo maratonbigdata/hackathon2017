@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Petition</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ petition.id }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{% if petition.date %}{{ petition.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>State</th>
+                <td>{{ petition.state }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('petition_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

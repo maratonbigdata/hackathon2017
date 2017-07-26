@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Petitions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>State</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for petition in petitions %}
+            <tr>
+                <td><a href="{{ path('petition_show', { 'id': petition.id }) }}">{{ petition.id }}</a></td>
+                <td>{% if petition.date %}{{ petition.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ petition.state }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('petition_show', { 'id': petition.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

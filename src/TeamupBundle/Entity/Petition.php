@@ -5,12 +5,12 @@ namespace TeamupBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Invitation
+ * Petition
  *
- * @ORM\Table(name="invitation")
- * @ORM\Entity(repositoryClass="TeamupBundle\Repository\InvitationRepository")
+ * @ORM\Table(name="petition")
+ * @ORM\Entity(repositoryClass="TeamupBundle\Repository\PetitionRepository")
  */
-class Invitation
+class Petition
 {
     /**
      * @var int
@@ -36,18 +36,19 @@ class Invitation
     private $state;
 
     /**
-     * Many Invitations have One Sender.
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="sendedInvitations")
+     * Many Petitions have One Sender.
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="sendedPetitions")
      * @ORM\JoinColumn(name="sender_id", referencedColumnName="id")
      */
     private $sender;
 
     /**
-     * Many Invitations have One Reciever.
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="recievedInvitations")
+     * Many Petitions have One Reciever.
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="recievedPetitions")
      * @ORM\JoinColumn(name="reciever_id", referencedColumnName="id")
      */
     private $reciever;
+
 
     /**
      * Get id
@@ -63,7 +64,7 @@ class Invitation
      * Set date
      *
      * @param \DateTime $date
-     * @return Invitation
+     * @return Petition
      */
     public function setDate($date)
     {
@@ -86,7 +87,7 @@ class Invitation
      * Set state
      *
      * @param integer $state
-     * @return Invitation
+     * @return Petition
      */
     public function setState($state)
     {
@@ -103,6 +104,52 @@ class Invitation
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * Set sender
+     *
+     * @param \TeamupBundle\Entity\User $sender
+     * @return Petition
+     */
+    public function setSender(\TeamupBundle\Entity\User $sender = null)
+    {
+        $this->sender = $sender;
+
+        return $this;
+    }
+
+    /**
+     * Get sender
+     *
+     * @return \TeamupBundle\Entity\User 
+     */
+    public function getSender()
+    {
+        return $this->sender;
+    }
+
+    /**
+     * Set reciever
+     *
+     * @param \TeamupBundle\Entity\User $reciever
+     * @return Petition
+     */
+    public function setReciever(\TeamupBundle\Entity\User $reciever = null)
+    {
+        $this->reciever = $reciever;
+
+        return $this;
+    }
+
+    /**
+     * Get reciever
+     *
+     * @return \TeamupBundle\Entity\User 
+     */
+    public function getReciever()
+    {
+        return $this->reciever;
     }
 
     /**
@@ -133,49 +180,4 @@ class Invitation
         return $this->state;
     }
 
-    /**
-     * Set sender
-     *
-     * @param \TeamupBundle\Entity\User $sender
-     * @return Invitation
-     */
-    public function setSender(\TeamupBundle\Entity\User $sender = null)
-    {
-        $this->sender = $sender;
-
-        return $this;
-    }
-
-    /**
-     * Get sender
-     *
-     * @return \TeamupBundle\Entity\User 
-     */
-    public function getSender()
-    {
-        return $this->sender;
-    }
-
-    /**
-     * Set reciever
-     *
-     * @param \TeamupBundle\Entity\User $reciever
-     * @return Invitation
-     */
-    public function setReciever(\TeamupBundle\Entity\User $reciever = null)
-    {
-        $this->reciever = $reciever;
-
-        return $this;
-    }
-
-    /**
-     * Get reciever
-     *
-     * @return \TeamupBundle\Entity\User 
-     */
-    public function getReciever()
-    {
-        return $this->reciever;
-    }
 }
