@@ -14,19 +14,19 @@ class InvitationRepository extends EntityRepository
 {
 	public function findOthersOfSameRecieverTeam($invitation)
 	{
-        $senderId = $invitation->getSender()->getId();
-        $recieverId = $invitation->getReciever()->getId();
+        $senderTeamId = $invitation->getSender()->getTeam()->getId();
+        $recieverTeamId = $invitation->getReciever()->getTeam()->getId();
 
 		$query = $this->getEntityManager()
             ->createQuery(
                 'SELECT i FROM TeamupBundle:Invitation i
                 JOIN i.reciever r
                 JOIN i.sender s
-                JOIN r.team t
-                JOIN t.user u
-                WHERE u.id = r.id AND s.id = :senderId AND r.id = :recieverId
+                JOIN r.team rt
+                JOIN s.team st
+                WHERE st.id = :senderTeamId AND rt.id = :recieverTeamId
                 '
-            )->setParameters(array('senderId' => $senderId, 'recieverId' => $recieverId) );
+            )->setParameters(array('senderTeamId' => $senderTeamId, 'recieverTeamId' => $recieverTeamId) );
      
         try 
         {

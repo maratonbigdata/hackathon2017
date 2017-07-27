@@ -1,28 +1,42 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Petition</h1>
+    <h1>Solicitud</h1>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ petition.id }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{% if petition.date %}{{ petition.date|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>State</th>
-                <td>{{ petition.state }}</td>
-            </tr>
-        </tbody>
-    </table>
+    {% if petition.sender.id == app.user.id %}
+        Has solicitado a {{petition.reciever.team.name}} ser parte de <strong>{{petition.reciever.team.name}}</strong>, ellos cuentan con los siguientes integrantes:
 
-    <ul>
-        <li>
-            <a href="{{ path('petition_index') }}">Back to the list</a>
-        </li>
-    </ul>
+        <ul>
+            {% for user in petition.reciever.team.users %}
+                <li>{{user.getFullName}}</li>
+            {% endfor %}
+        </ul>    
+
+        Estado de la solicitud: {{petition.getStateText}}<br><br>
+
+        <small style="float:left;">La solicitud fue enviada el {% if petition.date %}{{ petition.date|date('Y-m-d H:i:s') }}{% endif %}</small>
+
+    {% else %}
+        {% if petition.sender.hasTeam %}
+
+            {{petition.sender.getFullName}} en nombre de {{petition.sender.team.name}} le ha solicitado ser parte de <strong>{{petition.reciever.team.name}}</strong>. {{petition.sender.team.name}} cuenta con los siguientes integrantes:
+
+            <ul>
+                {% for user in petition.sender.team.users %}
+                    <li>{{user.getFullName}}</li>
+                {% endfor %}
+            </ul>    
+
+            
+            <em style="float:left;">**Basta con que un miembro de su grupo acepte para que todos sean agregados al nuevo grupo**</em><br><br>
+        {% endif %}
+        Estado de la solicitud: {{petition.getStateText}}<br><br>
+
+        <small style="float:left;">La solicitud fue enviada el {% if petition.date %}{{ petition.date|date('Y-m-d H:i:s') }}{% endif %}</small>
+
+        {% if petition.state == 1 or petition.state == 4 %}
+            <a href="{{path('change_petition_state', { 'id': petition.id, 'state': 2 } ) }}" class="btn btn-success btn1" role="button" >Agregarles al equipo</a> 
+            <a href="{{path('change_petition_state', { 'id': petition.id, 'state': 3 } ) }}" class="btn btn-danger btn1" role="button" >Declinar solicitud</a> 
+        {% endif %}
+    {% endif %}
 {% endblock %}

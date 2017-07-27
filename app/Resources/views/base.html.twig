@@ -38,9 +38,9 @@
               <ul class="nav navbar-nav">
                 {% if is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN')%}
                     {% if app.user.hasTeam %}
-                        <li><a href="{{ path('team_show', { 'id': app.user.team.id }) }}">Mi Grupo</a></li>
+                        <li><a href="{{ path('team_show', { 'id': app.user.team.id }) }}">Mi Equipo</a></li>
                     {% else %}
-                        <li><a href="{{ path('team_new')}}">Crear Grupo</a></li>
+                        <li><a href="{{ path('team_new')}}">Crear Equipo</a></li>
                     {% endif %}
                     {% if app.user.isSearching %}
                         <li><a href="{{ path('users_finder') }}">Buscar Postulantes</a></li>

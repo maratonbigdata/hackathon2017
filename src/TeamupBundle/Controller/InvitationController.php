@@ -236,7 +236,7 @@ class InvitationController extends Controller
                         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
                         $url = $baseurl.'/team/'.$team->getId();
                         $message = \Swift_Message::newInstance()
-                            ->setSubject('Han rechazado tu invitación!')
+                            ->setSubject('Han rechazado tu invitación')
                             ->setFrom('gestionIPre@ing.puc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
@@ -255,7 +255,7 @@ class InvitationController extends Controller
                         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
                         $url = $baseurl.'/team/'.$team->getId();
                         $message = \Swift_Message::newInstance()
-                            ->setSubject('Han aceptado tu invitación!')
+                            ->setSubject('Han rechazado tu invitación')
                             ->setFrom('gestionIPre@ing.puc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .

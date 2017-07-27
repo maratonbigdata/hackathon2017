@@ -12,21 +12,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class PetitionRepository extends EntityRepository
 {
-	public function findOthersOfSameRecieverTeam($petition)
+	public function findOthersOfSameSenderTeam($petition)
 	{
-        $senderId = $petition->getSender()->getId();
-        $recieverId = $petition->getReciever()->getId();
+        $senderTeamId = $petition->getSender()->getTeam()->getId();
+        $recieverTeamId = $petition->getReciever()->getTeam()->getId();
 
 		$query = $this->getEntityManager()
             ->createQuery(
                 'SELECT p FROM TeamupBundle:Petition p
                 JOIN p.reciever r
                 JOIN p.sender s
-                JOIN r.team t
-                JOIN t.user u
-                WHERE u.id = r.id AND s.id = :senderId AND r.id = :recieverId
+                JOIN r.team rt
+                JOIN s.team st
+                WHERE rt.id = :senderTeamId AND rt.id = :recieverTeamId
                 '
-            )->setParameters(array('senderId' => $senderId, 'recieverId' => $recieverId) );
+            )->setParameters(array('senderTeamId' => $senderTeamId, 'recieverTeamId' => $recieverTeamId) );
      
         try 
         {

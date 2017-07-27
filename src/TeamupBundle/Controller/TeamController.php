@@ -340,4 +340,47 @@ class TeamController extends Controller
 
         return $this->redirectToRoute('team_users_edit', array('id' => $team->getId()));
     }
+
+    /**
+     * Apply team.
+     *
+     * @Route("/{id}/apply", name="apply_team")
+     * @Method({"GET", "POST"})
+     */
+    public function applyAction(Team $team)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        // use security $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        //eliminar todas las invitaciones enviadas
+        //eliminar todas las invitaciones Recibidas
+
+        //eliminar todas las solicitudes enviadas
+        //eliminar todas las solicitudes Recibidas
+
+        // cambiar estado
+
+        //por cada usuario
+
+        // enviar mensaje
+        $message = \Swift_Message::newInstance()
+                    ->setSubject('Actualización TeamUp')
+                    ->setFrom('gestionIPre@ing.puc.cl')
+                    ->setTo(array($user->getEmail()))
+                    ->setBody('<html>' .
+                        ' <head></head>' .
+                        ' <body>' .
+                        'Hola, '.$currentUser->getFullName().' te ha elliminado del equipo. </br>'.
+                        'Esperamos que esto no sea un inconveniente para participar de nuestra hackathon, ingresa a <a href="http://www.maratonbigdata.cl">TeamUp</a> y busca tu nuevo equipo!' .
+                        '</br></br>'.
+                        '(No responda este email)</body>' .
+                        '</html>',
+                        'text/html')
+                ;
+        $this->get('mailer')->send($message);
+
+
+        return $this->redirectToRoute('team_show', array('id' => $team->getId()));
+    }
 }

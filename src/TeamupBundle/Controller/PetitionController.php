@@ -6,6 +6,8 @@ use TeamupBundle\Entity\Petition;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use TeamupBundle\Entity\User;
 
 /**
  * Petition controller.
@@ -65,8 +67,8 @@ class PetitionController extends Controller
                 ->setBody('<html>' .
                     ' <head></head>' .
                     ' <body>' .
-                    ' Hola, un participante les ha solicitado a unirse a su equipo. <br>Para ver la solicitud, haga clíck <a href="'.$url.'">aquí</a><br><br>'.
-                    'Recuerden que basta con que un miembro acepte la petición<br><br>'.
+                    ' Hola, un participante les ha solicitado a unirse a su equipo. <br>Para ver la solicitud, haga cl?k <a href="'.$url.'">aqu?/a><br><br>'.
+                    'Recuerden que basta con que un miembro acepte la petici?<br><br>'.
                     ' TeamUp'.
                     '</html>',
                     'text/html')
@@ -83,7 +85,7 @@ class PetitionController extends Controller
                 ->setBody('<html>' .
                     ' <head></head>' .
                     ' <body>' .
-                    ' Hola, un participante le ha solicitado a unirse a un equipo. <br>Para ver la solicitud, haga clíck <a href="'.$url.'">aquí</a><br><br>'.
+                    ' Hola, un participante le ha solicitado a unirse a un equipo. <br>Para ver la solicitud, haga cl?k <a href="'.$url.'">aqu?/a><br><br>'.
                     ' TeamUp'.
                     '</html>',
                     'text/html')
@@ -126,11 +128,11 @@ class PetitionController extends Controller
         $em->persist($petition);
         $em->flush();
 
-        $team = $petition->getSender()->GetTeam();
+        $recievedTeam = $petition->getReciever()->GetTeam();
 
         if($petition->getReciever()->hasTeam())
         {
-            $petitionsTeam = $em->getRepository('TeamupBundle:Petition')->findOthersOfSameRecieverTeam($petition);
+            $petitionsTeam = $em->getRepository('TeamupBundle:Petition')->findOthersOfSameSenderTeam($petition);
 
             foreach ($petitionsTeam as $petitionTeam) 
             {
@@ -143,27 +145,27 @@ class PetitionController extends Controller
         switch ($petition->getState())
         {
             case 2: //aceptada
-                //acciones preguntados
-                if($petition->getReciever()->hasTeam())
+                //acciones sended
+                if($petition->getSender()->hasTeam())
                 {
-                    foreach ($petition->getReciever()->getTeam()->getUsers() as $member) 
+                    foreach ($petition->getSender()->getTeam()->getUsers() as $member) 
                     {
                         //agregar al equipo
-                        $member->setTeam($team);
+                        $member->setTeam($recievedTeam);
                         $em->persist($member);
                         $em->flush();
 
                         //enviar email
                         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-                        $url = $baseurl.'/team/'.$team->getId();
+                        $url = $baseurl.'/team/'.$recievedTeam->getId();
                         $message = \Swift_Message::newInstance()
-                            ->setSubject('Has sido agregado a un equipo!')
+                            ->setSubject('Han sido aceptados en el equipo '.$recievedTeam->getName())
                             ->setFrom('gestionIPre@ing.puc.cl')
                             ->setTo(array($member->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
                                 ' <body>' .
-                                ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la invitación para unirse a '.$team->getName().', todos los miembros de su equipo anterior se han unido al nuevo equipo. <br>Para ver el nuevo equipo, haga clíck <a href="'.$url.'">aquí</a><br><br>'.
+                                ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la solicitud para unirse a '.$recievedTeam->getName().', todos los miembros de tu equipo se han unido en conjunto. <br>Para ver tu nuevo equipo, haga clÃ­ck <a href="'.$url.'">aquÃ­</a><br><br>'.
                                 ' TeamUp'.
                                 '</html>',
                                 'text/html')
@@ -174,27 +176,28 @@ class PetitionController extends Controller
                 else
                 {
                     //agregar al equipo
-                    $petition->getReciever()->setTeam($team);
-                    $em->persist($petition);
+                    $sender = $petition->getSender();
+                    $sender->setTeam($recievedTeam);
+                    $em->persist($sender);
                     $em->flush();
                 }
 
-                //acciones invitadores
-                foreach ($petition->getSender()->getTeam()->getUsers() as $user) 
+                //acciones recivier
+                foreach ($petition->getReciever()->getTeam()->getUsers() as $user) 
                 {
-                    if($petition->getReciever()->hasTeam())
+                    if($petition->getSender()->hasTeam())
                     {
                         //enviar email
                         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-                        $url = $baseurl.'/team/'.$team->getId();
+                        $url = $baseurl.'/team/'.$recievedTeam->getId();
                         $message = \Swift_Message::newInstance()
-                            ->setSubject('Han aceptado tu invitación!')
+                            ->setSubject('Han aceptado tu invitaciÃ³n!')
                             ->setFrom('gestionIPre@ing.puc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
                                 ' <body>' .
-                                ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la invitación de '.$petition->getSender()->getFullName().' para unirse a '.$team->getName().'. Todos los miembros de tu equipo se han unido a su equipo. <br>Para ver el equipo, haga clíck <a href="'.$url.'">aquí</a><br><br>'.
+                                ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la solicitud de '.$petition->getSender()->getFullName().' para unirse a tu equipo '.$recievedTeam->getName().'. El usuario y sus miembros se han unido a '.$recievedTeam->getName().'. <br>Para ver el equipo, haga clÃ­ck <a href="'.$url.'">aquÃ­</a><br><br>'.
                                 ' TeamUp'.
                                 '</html>',
                                 'text/html')
@@ -205,15 +208,15 @@ class PetitionController extends Controller
                     {
                         //enviar email
                         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-                        $url = $baseurl.'/team/'.$team->getId();
+                        $url = $baseurl.'/team/'.$recievedTeam->getId();
                         $message = \Swift_Message::newInstance()
-                            ->setSubject('Han aceptado tu invitación!')
+                            ->setSubject('Han aceptado tu invitaci?!')
                             ->setFrom('gestionIPre@ing.puc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
                                 ' <body>' .
-                                ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la invitación de '.$petition->getSender()->getFullName().' para unirse a '.$team->getName().'y ha sido agregado al equipo. <br>Para ver el equipo, haga clíck <a href="'.$url.'">aquí</a><br><br>'.
+                                ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la invitaciÃ³ de '.$petition->getSender()->getFullName().' para unirse a tu equipo '.$recievedTeam->getName().'y ha sido agregado su equipo. <br>Para ver el equipo, haga clÃ­ck <a href="'.$url.'">aquÃ­</a><br><br>'.
                                 ' TeamUp'.
                                 '</html>',
                                 'text/html')
@@ -226,19 +229,19 @@ class PetitionController extends Controller
                 //enviar email de rechazo
                 foreach ($petition->getSender()->getTeam()->getUsers() as $user) 
                 {
-                    if($petition->getReciever()->hasTeam())
+                    if($petition->getSender()->hasTeam())
                     {
                         //enviar email
                         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-                        $url = $baseurl.'/team/'.$team->getId();
+                        $url = $baseurl.'/team/'.$petition->getSender()->getTeam()->getId();
                         $message = \Swift_Message::newInstance()
-                            ->setSubject('Han rechazado tu invitación!')
+                            ->setSubject('Han rechazado tu solicitud')
                             ->setFrom('gestionIPre@ing.puc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
                                 ' <body>' .
-                                ' Hola, '.$petition->getReciever()->getFullName().' ha rechazado la invitación de '.$petition->getSender()->getFullName().' para unirse a '.$team->getName().'. Ningún miembros de su equipo se han unido al suyo.<br>Para ver el equipo, haga clíck <a href="'.$url.'">aquí</a><br><br>'.
+                                ' Hola, '.$petition->getReciever()->getFullName().' ha rechazado la solicitud de '.$petition->getSender()->getFullName().' para unirse a '.$recievedTeam->getName().'. NingÃºn miembros de tu equipo se han unido al suyo.<br>Para ver tu equipo, haz clÃ­ck <a href="'.$url.'">aquÃ­</a><br><br>'.
                                 ' TeamUp'.
                                 '</html>',
                                 'text/html')
@@ -249,65 +252,21 @@ class PetitionController extends Controller
                     {
                         //enviar email
                         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-                        $url = $baseurl.'/team/'.$team->getId();
+                        $url = $baseurl.'/team/'.$recievedTeam->getId();
                         $message = \Swift_Message::newInstance()
-                            ->setSubject('Han aceptado tu invitación!')
+                            ->setSubject('Han rechazado tu solicitud')
                             ->setFrom('gestionIPre@ing.puc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
                                 ' <body>' .
-                                ' Hola, '.$petition->getReciever()->getFullName().' ha rechazado la invitación de '.$petition->getSender()->getFullName().' para unirse a '.$team->getName().'. <br>Para ver el equipo, haga clíck <a href="'.$url.'">aquí</a><br><br>'.
+                                ' Hola, '.$petition->getReciever()->getFullName().' ha rechazado la solicitud de '.$petition->getSender()->getFullName().' para unirse a '.$recievedTeam->getName().'<br><br>'.
                                 ' TeamUp'.
                                 '</html>',
                                 'text/html')
                         ;
                         $this->get('mailer')->send($message);
                     }
-                }
-                break;
-            case 4: //re enviada
-                //acciones invitados
-                if($petition->getReciever()->hasTeam())
-                {
-                    foreach ($petition->getReciever()->getTeam()->getUsers() as $member) 
-                    {
-                        //enviar email
-                        $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-                        $url = $baseurl.'/petition/'.$petition->getId();
-                        $message = \Swift_Message::newInstance()
-                            ->setSubject('Te han vuelto a invitar a un equipo!')
-                            ->setFrom('gestionIPre@ing.puc.cl')
-                            ->setTo(array($member->getEmail()))
-                            ->setBody('<html>' .
-                                ' <head></head>' .
-                                ' <body>' .
-                                ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la invitación para unirse a '.$team->getName().', basta con que uno de los miembros de tu actual equipo acepte para que todos los miembros de tu equipo anterior sean unido al nuevo equipo. <br>Para ver la invitación, haga clíck <a href="'.$url.'">aquí</a><br><br>'.
-                                ' TeamUp'.
-                                '</html>',
-                                'text/html')
-                        ;
-                        $this->get('mailer')->send($message);
-                    }
-                }
-                else
-                {
-                    //agregar al equipo
-                    $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-                    $url = $baseurl.'/petition/'.$petition->getId();
-                    $message = \Swift_Message::newInstance()
-                        ->setSubject('Te han vuelto a invitar a un equipo!')
-                        ->setFrom('gestionIPre@ing.puc.cl')
-                        ->setTo(array($member->getEmail()))
-                        ->setBody('<html>' .
-                            ' <head></head>' .
-                            ' <body>' .
-                            ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la invitación para unirse a '.$team->getName().'. <br>Para ver la invitación, haga clíck <a href="'.$url.'">aquí</a><br><br>'.
-                            ' TeamUp'.
-                            '</html>',
-                            'text/html')
-                    ;
-                    $this->get('mailer')->send($message);
                 }
                 break;
         }
