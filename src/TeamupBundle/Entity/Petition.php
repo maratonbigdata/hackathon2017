@@ -176,6 +176,9 @@ class Petition
             case 4:
                 return 'Re enviada';
                 break;
+            case 5:
+                return 'Anulada, el grupo ya postuló';
+                break;
         }
         return $this->state;
     }

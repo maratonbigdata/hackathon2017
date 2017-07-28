@@ -270,7 +270,7 @@ class TeamController extends Controller
                         ' <head></head>' .
                         ' <body>' .
                         'Hola, '.$currentUser->getFullName().' te ha agregado a su equipo. </br>'.
-                        'Usa este link para terminar tu inscripción y generar tu contraseña: ' .
+                        'Usa este link para terminar tu inscripci? y generar tu contrase?: ' .
                         '<a href="'.$url.'">'.$url.'</a></br></br>'.
                         '(No responda este email)</body>' .
                         '</html>',
@@ -322,7 +322,7 @@ class TeamController extends Controller
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
         $message = \Swift_Message::newInstance()
-                    ->setSubject('Actualización TeamUp')
+                    ->setSubject('Actualizaci? TeamUp')
                     ->setFrom('gestionIPre@ing.puc.cl')
                     ->setTo(array($user->getEmail()))
                     ->setBody('<html>' .
@@ -351,35 +351,108 @@ class TeamController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        // use security $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
-        //eliminar todas las invitaciones enviadas
-        //eliminar todas las invitaciones Recibidas
+        if($currentUser->getTeam()->getId() != $team->getId())
+        {
+            return $this->redirectToRoute('home');
+        }
 
-        //eliminar todas las solicitudes enviadas
-        //eliminar todas las solicitudes Recibidas
+        $ok = true;
+        $inactives = "";
+        //revisar que todos hayan aceptado
+        foreach ($team->getUsers() as $user) 
+        {        
+            if(!$user->getIsActive())
+            {
+                if(!$ok)
+                    $inactives += ", ";
+
+                $inactives += $user->getFullName();
+                $ok = false;
+            }
+        }
+
+        if(!$ok)
+        {
+            $this->addFlash(
+                'notice',
+                array(
+                    'alert' => 'danger',// danger, warning, info, success
+                    'title' => 'Error al postular: ',
+                    'message' => $inactives.' aÃºn no han iniciado sesiÃ³n (fueron agregados por un tercero). Por favor pÃ³nganse en contacto con ellos para que ingresen almenos una vez a la plataforma. '
+                )
+            );
+            return $this->redirectToRoute('team_show', array('id' => $team->getId()));
+        }
 
         // cambiar estado
+        $team->setStatus(2);
+        $em->persist($team);
+        $em->flush();
 
-        //por cada usuario
+        foreach ($team->getUsers() as $user) 
+        {
+            //eliminar todas las invitaciones enviadas
+            foreach ($user->getSendedInvitations() as $invitation) 
+            {
+                if($invitation->getState() == 1 || $invitation->getState() == 4)
+                {
+                    $invitation->setState(5);
+                    $em->persist($invitation);
+                    $em->flush();
+                }
+            }
 
-        // enviar mensaje
-        $message = \Swift_Message::newInstance()
-                    ->setSubject('Actualización TeamUp')
-                    ->setFrom('gestionIPre@ing.puc.cl')
-                    ->setTo(array($user->getEmail()))
-                    ->setBody('<html>' .
-                        ' <head></head>' .
-                        ' <body>' .
-                        'Hola, '.$currentUser->getFullName().' te ha elliminado del equipo. </br>'.
-                        'Esperamos que esto no sea un inconveniente para participar de nuestra hackathon, ingresa a <a href="http://www.maratonbigdata.cl">TeamUp</a> y busca tu nuevo equipo!' .
-                        '</br></br>'.
-                        '(No responda este email)</body>' .
-                        '</html>',
-                        'text/html')
-                ;
-        $this->get('mailer')->send($message);
+            //eliminar todas las invitaciones Recibidas
+            foreach ($user->getRecievedInvitations() as $invitation) 
+            {
+                if($invitation->getState() == 1 || $invitation->getState() == 4)
+                {
+                    $invitation->setState(5);
+                    $em->persist($invitation);
+                    $em->flush();
+                }
+            }
 
+            //eliminar todas las solicitudes enviadas
+            foreach ($user->getSendedPetitions() as $petition) 
+            {
+                if($petition->getState() == 1 || $petition->getState() == 4)
+                {
+                    $petition->setState(5);
+                    $em->persist($petition);
+                    $em->flush();
+                }
+            }
+
+            //eliminar todas las solicitudes Recibidas
+            foreach ($user->getRecievedPetitions() as $petition) 
+            {
+                if($petition->getState() == 1 || $petition->getState() == 4)
+                {
+                    $petition->setState(5);
+                    $em->persist($petition);
+                    $em->flush();
+                }
+            }
+
+            // enviar mensaje 
+            $message = \Swift_Message::newInstance()
+                        ->setSubject('Equipo postulado')
+                        ->setFrom('gestionIPre@ing.puc.cl')
+                        ->setTo(array($user->getEmail()))
+                        ->setBody('<html>' .
+                            ' <head></head>' .
+                            ' <body>' .
+                            'Felicitaciones ya postularon!, '.$currentUser->getFullName().' ha realizado la postulaciÃ³n del equipo. Te esperamos! </br>'.
+                            '</br></br>'.
+                            '(No responda este email)</body>' .
+                            '</html>',
+                            'text/html')
+                    ;
+            $this->get('mailer')->send($message);
+        }
 
         return $this->redirectToRoute('team_show', array('id' => $team->getId()));
     }

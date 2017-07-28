@@ -118,10 +118,10 @@ class PetitionController extends Controller
      */
     public function changeStateAction(Request $request, Petition $petition, $state)
     {
-        /*if($petition->getState() == $state || $state == 1)
+        if($petition->getState() == $state || $state == 1 || $petition->getState() == 5)
         {
             return $this->redirectToRoute('petition_show', array('id' => $petition->getId()));    
-        }*/
+        }
         
         $em = $this->getDoctrine()->getManager();
         $petition->setState($state);

@@ -120,7 +120,7 @@ class InvitationController extends Controller
      */
     public function changeStateAction(Request $request, Invitation $invitation, $state)
     {
-        if($invitation->getState() == $state || $state == 1)
+        if($petition->getState() == $state || $state == 1 || $petition->getState() == 5)
         {
             return $this->redirectToRoute('invitation_show', array('id' => $invitation->getId()));    
         }
