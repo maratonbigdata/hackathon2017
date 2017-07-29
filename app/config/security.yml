@@ -37,5 +37,14 @@ security:
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user, roles: ROLE_USER }
+        - { path: ^/interest, roles: ROLE_USER }
+        - { path: ^/invitation, roles: ROLE_USER }
+        - { path: ^/message, roles: ROLE_USER }
+        - { path: ^/petition, roles: ROLE_USER }
+        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/team, roles: ROLE_USER }
+
+        - { path: ^/user, roles: ROLE_USER }
 
         #- { path: ^/user/$, roles: ROLE_ADMIN }

@@ -256,8 +256,6 @@ class SecurityController extends Controller
         $form = $this->createForm(new UserType($em),$user);
         $form->handleRequest($request);
 
-        echo var_dump($form->getErrorsAsString());
-
         if ($form->isSubmitted() && $form->isValid()) {
             try
             {
