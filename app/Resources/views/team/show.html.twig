@@ -1,18 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Equipo</h1>
+    <h1>{{ team.name }}</h1>
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ team.id }}</td>
-            </tr>
-            <tr>
-                <th>Nombre</th>
-                <td>{{ team.name }}</td>
-            </tr>
             <tr>
                 <th>Estado</th>
                 <td>{{ team.statustext }}</td>
@@ -22,11 +14,19 @@
                 <td>{% if team.created %}{{ team.created|date('d-m-Y H:i:s') }}{% endif %}</td>
             </tr>
             <tr>
+                <th>Areas de Interés en el equipo</th>
+                <td>
+                    {% for interest in team.getInterestsArray %}
+                        <button style="margin-bottom:2px;" type="button" class="btn btn-default btn-xs">{{interest}}</button>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
                 <th>Usuarios</th>
                 <td>
                     <ul>
                         {% for user in team.users %}
-                            <li>{{user.getFullName}}</li>
+                            <li><a href="{{ path('user_show', { 'id': user.id }) }}"><span class="glyphicon glyphicon-{{user.profile.icon}}" aria-hidden="true"></span> {{user.getFullName}}</a></li>
                         {% endfor %}
                     </ul>
                 </td>
@@ -37,11 +37,9 @@
     {% if  is_granted('ROLE_ADMIN')%}
         <a href="{{ path('team_index') }}" class="btn btn-info btn1" role="button" >Equipos</a>
     {% endif %}
-    {% if  team.status == 1%}
-    <a href="{{ path('team_edit', { 'id': team.id }) }}" class="btn btn-primary btn2" role="button">Editar</a>
-    {% endif %}
-    {% if  team.status == 1%}
-    <a href="{{ path('apply_team', { 'id': team.id }) }}" class="btn btn-success btn2" role="button">Postular</a>
+    {% if  team.status == 1 and team.id == app.user.team.id %}
+        <a href="{{ path('team_edit', { 'id': team.id }) }}" class="btn btn-primary btn2" role="button">Editar</a>
+        <a href="{{ path('apply_team', { 'id': team.id }) }}" class="btn btn-success btn2" role="button">Postular</a>
     {% endif %}
     {% if  is_granted('ROLE_ADMIN')%}
         <input type="submit" value="Eliminar" class="btn btn-danger btn2" role="button">
