@@ -26,11 +26,11 @@ class MessageController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
-        $messages = $em->getRepository('TeamupBundle:Message')->findAll();
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        $usersWithMessages = $em->getRepository('TeamupBundle:Message')->usersWithMessages($currentUser);
 
         return $this->render('message/index.html.twig', array(
-            'messages' => $messages,
+            'usersWithMessages' => $usersWithMessages,
         ));
     }
 

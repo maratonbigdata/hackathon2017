@@ -28,10 +28,13 @@ class InvitationController extends Controller
 
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
-        $invitations = $em->getRepository('TeamupBundle:Invitation')->findBySender($currentUser);
+        $invitationsSended = $em->getRepository('TeamupBundle:Invitation')->findBySender($currentUser);
+
+        $invitationsRecieved = $em->getRepository('TeamupBundle:Invitation')->findByReciever($currentUser);
 
         return $this->render('invitation/index.html.twig', array(
-            'invitations' => $invitations,
+            'invitationsSended' => $invitationsSended,
+            'invitationsRecieved' => $invitationsRecieved,
         ));
     }
 

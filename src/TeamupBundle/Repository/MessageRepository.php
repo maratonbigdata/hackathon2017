@@ -34,6 +34,30 @@ class MessageRepository extends EntityRepository
         }
 	}
 
+    public function usersWithMessages($user)
+    {
+        $query = $this->getEntityManager()
+            ->createQuery(
+                'SELECT u FROM TeamupBundle:User u
+                JOIN u.sendedMessages sm
+                JOIN u.recievedMessages rm
+                JOIN sm.reciever ur
+                JOIN rm.sender us
+                WHERE ur.id = :userId OR us.id = :userId
+                ORDER BY u.name
+                '
+            )->setParameters(array('userId' => $user->getId() ));
+     
+        try 
+        {
+            return $query->getResult();
+        } 
+        catch (\Doctrine\ORM\NoResultException $e) 
+        {
+            return null;
+        }
+    }
+
     public function findLatest($message, $user, $currentUser)
     {
         $query = $this->getEntityManager()

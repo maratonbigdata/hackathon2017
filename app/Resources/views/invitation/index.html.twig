@@ -1,34 +1,66 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Invitations list</h1>
+    <h1>Mis Invitaciones</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Invitado</th>
-                <th>Enviado el</th>
-                <th>State</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for invitation in invitations %}
-            <tr>
-                <td>{{invitation.reciever.getFullName}}</td>
-                <td>{% if invitation.date %}{{ invitation.date|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ invitation.getStateText }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('invitation_show', { 'id': invitation.id }) }}">show</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#recieved" aria-controls="recieved" role="tab" data-toggle="tab">Recibidas</a></li>
+            <li role="presentation"><a href="#sended" aria-controls="sended" role="tab" data-toggle="tab">Enviadas</a></li>
+        </ul>
 
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="recieved">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Enviado el</th>
+                            <th>Estado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for invitation in invitationsRecieved %}
+                        <tr>
+                            <td>{{invitation.sender.getFullName}}{% if invitation.sender.hasTeam %} ({{invitation.sender.team.name}}) {% endif %}</td>
+                            <td>{% if invitation.date %}{{ invitation.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+                            <td>{{ invitation.getStateText }}</td>
+                            <td>
+                                <a class="btn btn-xs btn-primary" href="{{ path('invitation_show', { 'id': invitation.id }) }}">Ver</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="sended">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Enviado el</th>
+                            <th>Estado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for invitation in invitationsSended %}
+                        <tr>
+                            <td>{{invitation.reciever.getFullName}}{% if invitation.reciever.hasTeam %} ({{invitation.reciever.team.name}}) {% endif %}</td>
+                            <td>{% if invitation.date %}{{ invitation.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+                            <td>{{ invitation.getStateText }}</td>
+                            <td>
+                                <a class="btn btn-xs btn-primary" href="{{ path('invitation_show', { 'id': invitation.id }) }}">Ver</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     
 {% endblock %}

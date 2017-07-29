@@ -26,10 +26,15 @@ class PetitionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $petitions = $em->getRepository('TeamupBundle:Petition')->findAll();
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        $petitionsSended = $em->getRepository('TeamupBundle:Petition')->findBySender($currentUser);
+
+        $petitionsRecieved = $em->getRepository('TeamupBundle:Petition')->findByReciever($currentUser);
 
         return $this->render('petition/index.html.twig', array(
-            'petitions' => $petitions,
+            'petitionsSended' => $petitionsSended,
+            'petitionsRecieved' => $petitionsRecieved,
         ));
     }
 
