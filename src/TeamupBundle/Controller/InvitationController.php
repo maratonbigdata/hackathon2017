@@ -47,6 +47,16 @@ class InvitationController extends Controller
     public function newAction(Request $request, User $user)
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        if(!($user->hasTeam() && $user->getTeam()->getStatus == 1))
+        {
+            return $this->redirectToRoute('home');
+        }
+        if(!($currentUser->hasTeam() && $currentUser->getTeam()->getStatus == 1))
+        {
+            return $this->redirectToRoute('home');
+        }
+
         $invitation = new Invitation();
 
         $invitation->setSender($currentUser);
@@ -109,6 +119,12 @@ class InvitationController extends Controller
      */
     public function showAction(Invitation $invitation)
     {
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        if(!($invitation->getSender()->getId() == $currentUser->getId() || $invitation->getReciever()->getId() == $currentUser->getId()) )
+        {
+            return $this->redirectToRoute('home');
+        }
 
         return $this->render('invitation/show.html.twig', array(
             'invitation' => $invitation,
@@ -123,6 +139,11 @@ class InvitationController extends Controller
      */
     public function changeStateAction(Request $request, Invitation $invitation, $state)
     {
+        if(!($invitation->getSender()->getId() == $currentUser->getId() || $invitation->getReciever()->getId() == $currentUser->getId()) )
+        {
+            return $this->redirectToRoute('home');
+        }
+        
         if($petition->getState() == $state || $state == 1 || $petition->getState() == 5)
         {
             return $this->redirectToRoute('invitation_show', array('id' => $invitation->getId()));    

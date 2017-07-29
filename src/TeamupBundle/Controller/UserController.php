@@ -127,6 +127,12 @@ class UserController extends Controller
      */
     public function editAction(Request $request, User $user)
     {
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        if($user->getId() != $currentUser->getId())
+        {
+            return $this->redirectToRoute('home');
+        }
+
         $deleteForm = $this->createDeleteForm($user);
         $editForm = $this->createForm('TeamupBundle\Form\UserType', $user);
         $editForm->handleRequest($request);
@@ -152,16 +158,8 @@ class UserController extends Controller
      */
     public function deleteAction(Request $request, User $user)
     {
-        $form = $this->createDeleteForm($user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($user);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('user_index');
+        //no delete action
+        return $this->redirectToRoute('home');
     }
 
     /**
