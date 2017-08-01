@@ -45,4 +45,5 @@ security:
         - { path: ^/message, roles: ROLE_USER }
         - { path: ^/petition, roles: ROLE_USER }
         - { path: ^/profile, roles: ROLE_ADMIN }
+        - { path: ^/team/$, roles: ROLE_ADMIN }
         - { path: ^/team, roles: ROLE_USER }

@@ -42,6 +42,8 @@ class MessageController extends Controller
      */
     public function newAction(Request $request)
     {
+        return $this->redirectToRoute('message_index');
+
         $message = new Message();
         $form = $this->createForm('TeamupBundle\Form\MessageType', $message);
         $form->handleRequest($request);
@@ -68,6 +70,8 @@ class MessageController extends Controller
      */
     public function showAction(Message $message)
     {
+        return $this->redirectToRoute('message_index');
+
         $deleteForm = $this->createDeleteForm($message);
 
         return $this->render('message/show.html.twig', array(
@@ -84,6 +88,8 @@ class MessageController extends Controller
      */
     public function editAction(Request $request, Message $message)
     {
+        return $this->redirectToRoute('message_index');
+
         $deleteForm = $this->createDeleteForm($message);
         $editForm = $this->createForm('TeamupBundle\Form\MessageType', $message);
         $editForm->handleRequest($request);
@@ -109,6 +115,7 @@ class MessageController extends Controller
      */
     public function deleteAction(Request $request, Message $message)
     {
+        return $this->redirectToRoute('message_index');
         $form = $this->createDeleteForm($message);
         $form->handleRequest($request);
 

@@ -46,6 +46,11 @@ class TeamController extends Controller
         $em = $this->getDoctrine()->getManager();
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
+        if($currentUser->getTeam()->getStatus() != 1)
+        {
+            return $this->redirectToRoute('home');
+        }
+
         $teams = $em->getRepository('TeamupBundle:Team')->wantedTeams($currentUser);
 
         $teams_array = array();
@@ -119,6 +124,11 @@ class TeamController extends Controller
      */
     public function showAction(Team $team)
     {
+        if($currentUser->getTeam()->getId() != $team->getId())
+        {
+            return $this->redirectToRoute('home');
+        }
+
         $deleteForm = $this->createDeleteForm($team);
 
         return $this->render('team/show.html.twig', array(
@@ -135,6 +145,12 @@ class TeamController extends Controller
      */
     public function editAction(Request $request, Team $team)
     {
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        if($currentUser->getTeam() != $team->getId())
+        {
+            return $this->redirectToRoute('home');
+        }
+
         $originalNeededs = new ArrayCollection();
 
         foreach ($team->getNeededs() as $needed) 
@@ -142,7 +158,6 @@ class TeamController extends Controller
             $originalNeededs->add($needed);
         }
 
-        $deleteForm = $this->createDeleteForm($team);
         $editForm = $this->createForm('TeamupBundle\Form\TeamType', $team);
         $editForm->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
@@ -174,7 +189,6 @@ class TeamController extends Controller
         return $this->render('team/edit.html.twig', array(
             'team' => $team,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -186,6 +200,8 @@ class TeamController extends Controller
      */
     public function deleteAction(Request $request, Team $team)
     {
+        return $this->redirectToRoute('home');
+
         $form = $this->createDeleteForm($team);
         $form->handleRequest($request);
 
@@ -223,6 +239,11 @@ class TeamController extends Controller
     public function editUsersAction(Request $request, Team $team)
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        if($currentUser->getTeam() != $team->getId())
+        {
+            return $this->redirectToRoute('home');
+        }
+
         $em = $this->getDoctrine()->getManager();
         $user = new User();
         $form = $this->createForm('TeamupBundle\Form\UserType', $user);
@@ -306,6 +327,12 @@ class TeamController extends Controller
      */
     public function eliminateAction($tid, $uid)
     {
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        if($currentUser->getTeam() != $team->getId())
+        {
+            return $this->redirectToRoute('home');
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $team = $em->getRepository('TeamupBundle:Team')->find($tid);
@@ -353,7 +380,7 @@ class TeamController extends Controller
 
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
-        if($currentUser->getTeam()->getId() != $team->getId())
+        if($currentUser->getTeam()->getId() != $team->getId() || $team->getId() != 1)
         {
             return $this->redirectToRoute('home');
         }

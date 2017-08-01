@@ -47,6 +47,16 @@ class PetitionController extends Controller
     public function newAction(Request $request, User $user)
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        if(!($user->hasTeam() && $user->getTeam()->getStatus == 1))
+        {
+            return $this->redirectToRoute('home');
+        }
+        if(!($currentUser->hasTeam() && $currentUser->getTeam()->getStatus == 1))
+        {
+            return $this->redirectToRoute('home');
+        }
+
         $petition = new Petition();
 
         $petition->setSender($currentUser);
@@ -84,7 +94,7 @@ class PetitionController extends Controller
         else
         {
             $message = \Swift_Message::newInstance()
-                ->setSubject('Te han invitado a un equipo!')
+                ->setSubject('Nueva Solicitud!')
                 ->setFrom('gestionIPre@ing.puc.cl')
                 ->setTo(array($user->getEmail()))
                 ->setBody('<html>' .
@@ -109,6 +119,12 @@ class PetitionController extends Controller
      */
     public function showAction(Petition $petition)
     {
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+
+        if(!($petition->getSender()->getId() == $currentUser->getId() || $petition->getReciever()->getId() == $currentUser->getId()) )
+        {
+            return $this->redirectToRoute('home');
+        }
 
         return $this->render('petition/show.html.twig', array(
             'petition' => $petition,
@@ -123,6 +139,11 @@ class PetitionController extends Controller
      */
     public function changeStateAction(Request $request, Petition $petition, $state)
     {
+        if(!($petition->getSender()->getId() == $currentUser->getId() || $petition->getReciever()->getId() == $currentUser->getId()) )
+        {
+            return $this->redirectToRoute('home');
+        }
+
         if($petition->getState() == $state || $state == 1 || $petition->getState() == 5)
         {
             return $this->redirectToRoute('petition_show', array('id' => $petition->getId()));    
@@ -196,7 +217,7 @@ class PetitionController extends Controller
                         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
                         $url = $baseurl.'/team/'.$recievedTeam->getId();
                         $message = \Swift_Message::newInstance()
-                            ->setSubject('Han aceptado tu invitación!')
+                            ->setSubject('Han aceptado tu solicitud!')
                             ->setFrom('gestionIPre@ing.puc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
@@ -215,13 +236,13 @@ class PetitionController extends Controller
                         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
                         $url = $baseurl.'/team/'.$recievedTeam->getId();
                         $message = \Swift_Message::newInstance()
-                            ->setSubject('Han aceptado tu invitaci?!')
+                            ->setSubject('Han aceptado tu solicitud!')
                             ->setFrom('gestionIPre@ing.puc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
                                 ' <body>' .
-                                ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la invitació de '.$petition->getSender()->getFullName().' para unirse a tu equipo '.$recievedTeam->getName().'y ha sido agregado su equipo. <br>Para ver el equipo, haga clíck <a href="'.$url.'">aquí</a><br><br>'.
+                                ' Hola, '.$petition->getReciever()->getFullName().' ha aceptado la solicitud de '.$petition->getSender()->getFullName().' para unirse a tu equipo '.$recievedTeam->getName().'y ha sido agregado su equipo. <br>Para ver el equipo, haga clíck <a href="'.$url.'">aquí</a><br><br>'.
                                 ' TeamUp'.
                                 '</html>',
                                 'text/html')
