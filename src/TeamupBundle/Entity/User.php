@@ -172,6 +172,13 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $carrer;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="signed", type="datetime")
+     */
+    private $signed;
+
     public function __construct() {
         $this->isActive = true;
         // may not be needed, see section on salt below
@@ -184,6 +191,7 @@ class User implements AdvancedUserInterface, \Serializable
         $this->recievedInvitations = new ArrayCollection();
         $this->sendedPetitions = new ArrayCollection();
         $this->recievedPetitions = new ArrayCollection();
+        $this->signed = new \DateTime();
     }
 
     public function getPlainPassword()
@@ -1149,5 +1157,28 @@ class User implements AdvancedUserInterface, \Serializable
             'Otros'
             );
         return $options;
+    }
+
+    /**
+     * Set signed
+     *
+     * @param \DateTime $signed
+     * @return User
+     */
+    public function setSigned($signed)
+    {
+        $this->signed = $signed;
+
+        return $this;
+    }
+
+    /**
+     * Get signed
+     *
+     * @return \DateTime 
+     */
+    public function getSigned()
+    {
+        return $this->signed;
     }
 }

@@ -58,6 +58,13 @@ class Team
     private $modified;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="applied", type="datetime")
+     */
+    private $applied;
+
+    /**
      * One team has many users
      * @ORM\OneToMany(targetEntity="User", mappedBy="team")
      */
@@ -116,6 +123,14 @@ class Team
      */
     public function setStatus($status)
     {
+        if($status == 2)
+        {
+            $this->applied = new \DateTime();
+        }
+        else
+        {
+            $this->applied = null;
+        }
         $this->status = $status;
 
         return $this;
@@ -383,5 +398,28 @@ class Team
         $score = ($profile_team_score+$interests_team_score)/2;
 
         return $score;
+    }
+
+    /**
+     * Set applied
+     *
+     * @param \DateTime $applied
+     * @return Team
+     */
+    public function setApplied($applied)
+    {
+        $this->applied = $applied;
+
+        return $this;
+    }
+
+    /**
+     * Get applied
+     *
+     * @return \DateTime 
+     */
+    public function getApplied()
+    {
+        return $this->applied;
     }
 }

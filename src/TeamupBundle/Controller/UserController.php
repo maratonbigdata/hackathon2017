@@ -35,6 +35,23 @@ class UserController extends Controller
     /**
      * Lists all user entities.
      *
+     * @Route("/reportUsers/PwzmEY3cn9FDV2wJwGeWSMRCzauHQg", name="user_report")
+     * @Method("GET")
+     */
+    public function reportAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $users = $em->getRepository('TeamupBundle:User')->findAll();
+
+        return $this->render('user/report.html.twig', array(
+            'users' => $users,
+        ));
+    }
+
+    /**
+     * Lists all user entities.
+     *
      * @Route("/UsersMatcher", name="users_finder")
      * @Method("GET")
      */

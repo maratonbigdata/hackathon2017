@@ -39,6 +39,8 @@ security:
         - { path: ^/$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/$, roles: ROLE_ADMIN }
         - { path: ^/user/new$, roles: ROLE_ADMIN }
+        - { path: ^/user/$, roles: ROLE_ADMIN }
+        - { path: ^/user/reportUsers/PwzmEY3cn9FDV2wJwGeWSMRCzauHQg$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/, roles: ROLE_USER }
         - { path: ^/interest, roles: ROLE_ADMIN }
         - { path: ^/invitation, roles: ROLE_USER }

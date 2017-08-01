@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Reporte</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Rut</th>
+                <th>Email</th>
+                <th>Perfil</th>
+                <th>Ocupación</th>
+                <th>Universidad</th>
+                <th>Carrera</th>
+                <th>Tiene Equipo</th>
+                <th>Estado Equipo</th>
+                <th>Fecha de Creación</th>
+                <th>Fecha de postulación</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.rut }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.profile.name }}</td>
+                <td>{{ user.occupation }}</td>
+                <td>{{ user.university }}</td>
+                <td>{{ user.carrer }}</td>
+                <td>{{ user.hasTeam }}</td>
+                <td>{% if user.hasTeam %}{{ user.team.getStatusText }}{% endif %}</td>
+                <td>{% if user.signed %}{{ user.signed|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if user.hasTeam and user.team.status == 2 %}{{ user.team.applied |date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
