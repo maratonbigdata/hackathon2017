@@ -151,6 +151,27 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $recievedPetitions;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="occupation", type="string", length=200)
+     */
+    private $occupation;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="university", type="string", length=200, nullable=true)
+     */
+    private $university;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="carrer", type="string", length=200, nullable=true)
+     */
+    private $carrer;
+
     public function __construct() {
         $this->isActive = true;
         // may not be needed, see section on salt below
@@ -869,5 +890,264 @@ class User implements AdvancedUserInterface, \Serializable
     public function getRecievedPetitions()
     {
         return $this->recievedPetitions;
+    }
+
+    /**
+     * Set occupation
+     *
+     * @param string $occupation
+     * @return User
+     */
+    public function setOccupation($occupation)
+    {
+        $this->occupation = $occupation;
+
+        return $this;
+    }
+
+    /**
+     * Get occupation
+     *
+     * @return string 
+     */
+    public function getOccupation()
+    {
+        return $this->occupation;
+    }
+
+    /**
+     * Get occupation options
+     *
+     * @return array 
+     */
+    public function getOccupationOptions()
+    {
+        $options = array('Estudiante', 'Trabajador Dependiente', 'Trabajador Independiente');
+
+        return $options;
+    }
+
+    /**
+     * Set university
+     *
+     * @param string $university
+     * @return User
+     */
+    public function setUniversity($university)
+    {
+        $this->university = $university;
+
+        return $this;
+    }
+
+    /**
+     * Get university
+     *
+     * @return string 
+     */
+    public function getUniversity()
+    {
+        return $this->university;
+    }
+
+    /**
+     * Get university options
+     *
+     * @return string 
+     */
+    public function getUniversityOptions()
+    {
+        $options = array(
+            'CFT ALFA',
+            'CFT ALPES',
+            'CFT ANDRES BELLO',
+            'CFT BARROS ARANA',
+            'CFT CAMARA DE COMERCIO DE SANTIAGO',
+            'CFT CENCO',
+            'CFT CENTRO TECNOLOGICO SUPERIOR INFOMED',
+            'CFT DE ENAC',
+            'CFT DE ENSEÑANZA DE ALTA COSTURA PAULINA DIARD',
+            'CFT DE LA INDUSTRIA GRAFICA - INGRAF',
+            'CFT DE TARAPACA',
+            'CFT DEL MEDIO AMBIENTE',
+            'CFT EDUCAP',
+            'CFT ESANE DEL NORTE',
+            'CFT ESCUELA CULINARIA FRANCESA - ECOLE',
+            'CFT ESCUELA DE ARTES APLICADAS OFICIOS DEL FUEGO',
+            'CFT ESTUDIO PROFESOR VALERO',
+            'CFT ICEL',
+            'CFT INACAP',
+            'CFT INSTITUTO CENTRAL DE CAPACITACION EDUCACIONAL ICCE',
+            'CFT INSTITUTO SUPERIOR ALEMAN DE COMERCIO INSALCO',
+            'CFT INSTITUTO SUPERIOR DE ESTUDIOS JURIDICOS CANON',
+            'CFT INSTITUTO TECNOLOGICO DE CHILE - I.T.C.',
+            'CFT IPROSEC',
+            'CFT JUAN BOHON',
+            'CFT LAPLACE',
+            'CFT LOS LAGOS',
+            'CFT LOTA-ARAUCO',
+            'CFT LUIS ALBERTO VERA',
+            'CFT MANPOWER',
+            'CFT MASSACHUSETTS',
+            'CFT PROANDES',
+            'CFT PRODATA',
+            'CFT PROFASOC',
+            'CFT PROTEC',
+            'CFT SAN AGUSTIN DE TALCA',
+            'CFT SANTO TOMAS',
+            'CFT TEODORO WICKEL KLUWEN',
+            'CFT UCEVALPO',
+            'IP AGRARIO ADOLFO MATTHEI',
+            'IP AIEP',
+            'IP CARLOS CASANUEVA',
+            'IP CIISA',
+            'IP CHILENO-BRITANICO DE CULTURA',
+            'IP DE ARTE Y COMUNICACION ARCOS',
+            'IP DE ARTES ESCENICAS KAREN CONNOLLY',
+            'IP DE CIENCIAS DE LA COMPUTACION ACUARIO DATA',
+            'IP DE CIENCIAS Y ARTES INCACEA',
+            'IP DE CIENCIAS Y EDUCACION HELEN KELLER',
+            'IP DE CHILE',
+            'IP DEL COMERCIO',
+            'IP DEL VALLE CENTRAL',
+            'IP DIEGO PORTALES',
+            'IP DR. VIRGINIO GOMEZ G.',
+            'IP DUOC UC',
+            'IP EATRI INSTITUTO PROFESIONAL',
+            'IP ESCUELA DE CINE DE CHILE',
+            'IP ESCUELA DE CONTADORES AUDITORES DE SANTIAGO',
+            'IP ESCUELA MODERNA DE MUSICA',
+            'IP ESUCOMEX',
+            'IP INACAP',
+            'IP INSTITUTO DE ESTUDIOS BANCARIOS GUILLERMO SUBERCASEAUX',
+            'IP INSTITUTO INTERNACIONAL DE ARTES CULINARIAS Y SERVICIOS',
+            'IP INSTITUTO NACIONAL DEL FUTBOL',
+            'IP INSTITUTO SUPERIOR DE ARTES Y CIENCIAS DE LA COMUNICACION',
+            'IP IPG',
+            'IP LA ARAUCANA',
+            'IP LATINOAMERICANO DE COMERCIO EXTERIOR',
+            'IP LIBERTADOR DE LOS ANDES',
+            'IP LOS LAGOS',
+            'IP LOS LEONES',
+            'IP MAR FUTURO',
+            'IP PROJAZZ',
+            'IP PROVIDENCIA',
+            'IP SANTO TOMAS',
+            'IP VERTICAL',
+            'PONTIFICIA UNIVERSIDAD CATOLICA DE CHILE',
+            'PONTIFICIA UNIVERSIDAD CATOLICA DE VALPARAISO',
+            'UNIVERSIDAD ACADEMIA DE HUMANISMO CRISTIANO',
+            'UNIVERSIDAD ADOLFO IBAÑEZ',
+            'UNIVERSIDAD ADVENTISTA DE CHILE',
+            'UNIVERSIDAD ALBERTO HURTADO',
+            'UNIVERSIDAD ANDRES BELLO',
+            'UNIVERSIDAD ARTURO PRAT',
+            'UNIVERSIDAD AUSTRAL DE CHILE',
+            'UNIVERSIDAD AUTONOMA DE CHILE',
+            'UNIVERSIDAD BERNARDO OHIGGINS',
+            'UNIVERSIDAD BOLIVARIANA',
+            'UNIVERSIDAD CATOLICA DE LA SANTISIMA CONCEPCION',
+            'UNIVERSIDAD CATOLICA DE TEMUCO',
+            'UNIVERSIDAD CATOLICA DEL MAULE',
+            'UNIVERSIDAD CATOLICA DEL NORTE',
+            'UNIVERSIDAD CATOLICA SILVA HENRIQUEZ',
+            'UNIVERSIDAD CENTRAL DE CHILE',
+            'UNIVERSIDAD CHILENO BRITANICA DE CULTURA',
+            'UNIVERSIDAD DE ACONCAGUA',
+            'UNIVERSIDAD DE ANTOFAGASTA',
+            'UNIVERSIDAD DE ARTE Y CIENCIAS SOCIALES ARCIS',
+            'UNIVERSIDAD DE ARTES, CIENCIAS Y COMUNICACION - UNIACC',
+            'UNIVERSIDAD DE ATACAMA',
+            'UNIVERSIDAD DE AYSEN',
+            'UNIVERSIDAD DE CONCEPCION',
+            'UNIVERSIDAD DE CHILE',
+            'UNIVERSIDAD DE LA FRONTERA',
+            'UNIVERSIDAD DE LA SERENA',
+            'UNIVERSIDAD DE LAS AMERICAS',
+            'UNIVERSIDAD DE LOS ANDES',
+            'UNIVERSIDAD DE LOS LAGOS',
+            'UNIVERSIDAD DE MAGALLANES',
+            'UNIVERSIDAD DE OHIGGINS',
+            'UNIVERSIDAD DE PLAYA ANCHA DE CIENCIAS DE LA EDUCACION',
+            'UNIVERSIDAD DE SANTIAGO DE CHILE',
+            'UNIVERSIDAD DE TALCA',
+            'UNIVERSIDAD DE TARAPACA',
+            'UNIVERSIDAD DE VALPARAISO',
+            'UNIVERSIDAD DE VIÑA DEL MAR',
+            'UNIVERSIDAD DEL BIO-BIO',
+            'UNIVERSIDAD DEL DESARROLLO',
+            'UNIVERSIDAD DEL PACIFICO',
+            'UNIVERSIDAD DIEGO PORTALES',
+            'UNIVERSIDAD FINIS TERRAE',
+            'UNIVERSIDAD GABRIELA MISTRAL',
+            'UNIVERSIDAD IBEROAMERICANA DE CIENCIAS Y TECNOLOGIA, UNICYT',
+            'UNIVERSIDAD LA REPUBLICA',
+            'UNIVERSIDAD LOS LEONES',
+            'UNIVERSIDAD MAYOR',
+            'UNIVERSIDAD METROPOLITANA DE CIENCIAS DE LA EDUCACION',
+            'UNIVERSIDAD MIGUEL DE CERVANTES',
+            'UNIVERSIDAD PEDRO DE VALDIVIA',
+            'UNIVERSIDAD SAN SEBASTIAN',
+            'UNIVERSIDAD SANTO TOMAS',
+            'UNIVERSIDAD SEK',
+            'UNIVERSIDAD TECNICA FEDERICO SANTA MARIA',
+            'UNIVERSIDAD TECNOLOGICA DE CHILE INACAP',
+            'UNIVERSIDAD TECNOLOGICA METROPOLITANA',
+            'UNIVERSIDAD UCINF'
+            );
+
+        return $options;
+    }
+
+    /**
+     * Set carrer
+     *
+     * @param string $carrer
+     * @return User
+     */
+    public function setCarrer($carrer)
+    {
+        $this->carrer = $carrer;
+
+        return $this;
+    }
+
+    /**
+     * Get carrer
+     *
+     * @return string 
+     */
+    public function getCarrer()
+    {
+        return $this->carrer;
+    }
+
+    /**
+     * Get carrer options
+     *
+     * @return string 
+     */
+    public function getCarrerOptions()
+    {
+        $options = aray(
+            'Ingeniería Civil',
+            'Ingeniería Comercial/Negocios',
+            'Diseño',
+            'Arquitectura',
+            'Artes/Música/Teatro',
+            'Ciencias',
+            'Psicología',
+            'Comunicaciones / Periodismo',
+            'Sociología',
+            'Derecho',
+            'Educación',
+            'Agronomía/Forestal',
+            'Medicina',
+            'Enfermería',
+            'Kinesiología',
+            'Construcción Civil',
+            'Otros'
+            );
+        return $options;
     }
 }

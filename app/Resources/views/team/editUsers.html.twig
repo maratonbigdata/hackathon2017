@@ -47,16 +47,18 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">Inscribir Nuevo Postulante</div>
-        <div class="panel-body">  
-            {{ form_start(form) }}
-                {{ form_widget(form) }}
-                <input type="submit" class="btn btn1 btn-success" value="Inscribir" />
-            {{ form_end(form) }}
+    {% if show_new %}
+        <div class="panel panel-default">
+            <div class="panel-heading">Inscribir Nuevo Postulante</div>
+            <div class="panel-body">  
+                {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <input type="submit" class="btn btn1 btn-success" value="Inscribir" />
+                {{ form_end(form) }}
 
+            </div>
         </div>
-    </div>
+    {% endif %} 
 
     {% if is_granted('ROLE_ADMIN') %}
         <a href="{{ path('team_index') }}" class="btn btn-info btn2" role="button" >Equipos</a>
@@ -72,6 +74,23 @@ window.onload = function() {
         allowClear: false,
         width: '100%'
     })
+
+    $("input[type=radio]").change(function() { 
+        if($(this).val() == "Estudiante" )
+        {
+            $('#teamupbundle_user_university').parent().show();
+            $('#teamupbundle_user_carrer').parent().show();
+            $('#teamupbundle_user_university').prop('disabled', false);
+            $('#teamupbundle_user_carrer').prop('disabled', false);
+        } 
+        else
+        {
+            $('#teamupbundle_user_university').parent().hide();
+            $('#teamupbundle_user_carrer').parent().hide();
+            $('#teamupbundle_user_university').prop('disabled', true);
+            $('#teamupbundle_user_carrer').prop('disabled', true);
+        }
+    });
 };
 
 function isValid()

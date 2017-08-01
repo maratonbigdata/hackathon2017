@@ -145,8 +145,15 @@ span.you
   overflow:auto;
 }
 
+div#teamupbundle_user_occupation input
+{
+  margin-right: 3px;
+}
 
-
+div#teamupbundle_user_occupation label
+{
+  margin-right: 7px;
+}
 
 
 

@@ -124,6 +124,7 @@ class TeamController extends Controller
      */
     public function showAction(Team $team)
     {
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
         if($currentUser->getTeam()->getId() != $team->getId())
         {
             return $this->redirectToRoute('home');
@@ -146,7 +147,7 @@ class TeamController extends Controller
     public function editAction(Request $request, Team $team)
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        if($currentUser->getTeam() != $team->getId())
+        if($currentUser->getTeam()->getId() != $team->getId())
         {
             return $this->redirectToRoute('home');
         }
@@ -239,7 +240,7 @@ class TeamController extends Controller
     public function editUsersAction(Request $request, Team $team)
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        if($currentUser->getTeam() != $team->getId())
+        if($currentUser->getTeam()->getId() != $team->getId())
         {
             return $this->redirectToRoute('home');
         }
@@ -313,9 +314,16 @@ class TeamController extends Controller
             }
         }
 
+        $show_new = false;
+        if(count($team->getUsers()) < 5 )
+        {
+            $show_new = true;
+        }
+
         return $this->render('team/editUsers.html.twig', array(
             'team' => $team,
             'form' => $form->createView(),
+            'show_new' => $show_new,
         ));
     }
 
@@ -383,6 +391,32 @@ class TeamController extends Controller
         if($currentUser->getTeam()->getId() != $team->getId() || $team->getId() != 1)
         {
             return $this->redirectToRoute('home');
+        }
+
+        if(count($team->getUsers() > 5 ))
+        {
+            $this->addFlash(
+                'notice',
+                array(
+                    'alert' => 'danger',// danger, warning, info, success
+                    'title' => 'Error al postular: ',
+                    'message' => ' Su equipo debe tener a lo más 5 participantes. Por favor regularice esta situación antes de postular su equipo. '
+                )
+            );
+            return $this->redirectToRoute('team_users_edit', array('id' => $team->getId()));
+        }
+
+        if(count($team->getUsers() < 2 ))
+        {
+            $this->addFlash(
+                'notice',
+                array(
+                    'alert' => 'danger',// danger, warning, info, success
+                    'title' => 'Error al postular: ',
+                    'message' => ' Su equipo debe tener al menos 2 participantes. Por favor regularice esta situación antes de postular su equipo. '
+                )
+            );
+            return $this->redirectToRoute('team_users_edit', array('id' => $team->getId()));
         }
 
         $ok = true;
