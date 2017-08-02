@@ -14,12 +14,18 @@ class TeamRepository extends EntityRepository
 {
 	public function wantedTeams($currentUser)
 	{
+        $currentId = 0;
+        if($currentUser->hasTeam())
+        {
+            $currentId = $currentUser->getTeam()->getId();
+        }
 		$query = $this->getEntityManager()
             ->createQuery(
-                'SELECT t FROM TeamupBundle:Team t
+                'SELECT distinct t FROM TeamupBundle:Team t
+                INNER JOIN t.users us
                 WHERE t.status = 1 AND t.id != :currentId
                 '
-            )->setParameter('currentId', $currentUser->getTeam()->getId() );
+            )->setParameter('currentId', $currentId);
     
         try 
         {

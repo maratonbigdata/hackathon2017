@@ -42,7 +42,7 @@ class UserController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $users = $em->getRepository('TeamupBundle:User')->findAll();
+        $users = $em->getRepository('TeamupBundle:User')->findByRole("ROLE_USER");
 
         return $this->render('user/report.html.twig', array(
             'users' => $users,

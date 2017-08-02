@@ -60,7 +60,7 @@ class Team
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="applied", type="datetime")
+     * @ORM\Column(name="applied", type="datetime", nullable=true)
      */
     private $applied;
 
@@ -339,11 +339,60 @@ class Team
     }
 
     /**
+     * Get match score (how much this fits to current user/team)
+     *
+     * @return integer 
+     */
+    public function getMatchScore($currentUser)
+    {
+        if($currentUser->hasTeam())
+        {
+            return $this->getMatchScoreTeam($currentUser->getTeam());
+        }
+
+        $score = 0;
+
+        $profile_team_score = 0;
+
+        foreach ($this->getNeededs() as $needed) 
+        {
+            if($currentUser->getProfile()->getId() == $needed->getProfile()->getId())
+                $profile_team_score = 1;
+        }
+
+        $interests_team_score = 0;
+
+        $this_team_interests = array();
+
+        foreach ($this->getUsers() as $user) 
+        {
+            foreach ($user->getInterests() as $interest) 
+            {
+                array_push($this_team_interests,$interest->getId());
+            }
+        }
+
+        $currentUser_interests = array();
+
+        foreach ($currentUser->getInterests() as $interest) 
+        {
+            array_push($currentUser_interests,$interest->getId());
+        }
+
+        $interests_team_score = floatval(count(array_intersect(array_unique($currentUser_interests),$this_team_interests)))*100/floatval(count(array_unique($currentUser_interests)));
+
+        //ponderar puntaje
+        $score = ($profile_team_score+$interests_team_score)/2;
+
+        return $score;
+    }
+
+    /**
      * Get match score (how much this fits to currentTeam)
      *
      * @return integer 
      */
-    public function getMatchScore($currentTeam)
+    public function getMatchScoreTeam($currentTeam)
     {
         $score = 0;
 

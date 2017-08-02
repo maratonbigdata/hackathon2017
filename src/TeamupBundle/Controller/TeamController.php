@@ -46,7 +46,7 @@ class TeamController extends Controller
         $em = $this->getDoctrine()->getManager();
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
-        if($currentUser->getTeam()->getStatus() != 1)
+        if($currentUser->hasTeam() && $currentUser->getTeam()->getStatus() != 1)
         {
             return $this->redirectToRoute('home');
         }
@@ -57,7 +57,7 @@ class TeamController extends Controller
 
         foreach ($teams as $team) 
         {
-            array_push($teams_array, array($team,$team->getMatchScore($currentUser->getTeam())));
+            array_push($teams_array, array($team,$team->getMatchScore($currentUser)));
         }
 
         usort($teams_array, function ($a,$b){
@@ -90,7 +90,6 @@ class TeamController extends Controller
         if ($form->isSubmitted() && $form->isValid()) 
         {
             $team->setCreated(new \DateTime());
-            $team->setModified(new \DateTime());
             $em = $this->getDoctrine()->getManager();
 
             foreach ($team->getNeededs() as $needed) 
@@ -106,7 +105,7 @@ class TeamController extends Controller
             }
             $em->persist($team);
             $em->flush();
-
+            
             return $this->redirectToRoute('team_edit', array('id' => $team->getId()));
         }
 
@@ -292,7 +291,7 @@ class TeamController extends Controller
                         ' <head></head>' .
                         ' <body>' .
                         'Hola, '.$currentUser->getFullName().' te ha agregado a su equipo. </br>'.
-                        'Usa este link para terminar tu inscripci? y generar tu contrase?: ' .
+                        'Usa este link para terminar tu inscripción y generar tu contraseña: ' .
                         '<a href="'.$url.'">'.$url.'</a></br></br>'.
                         '(No responda este email)</body>' .
                         '</html>',
