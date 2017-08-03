@@ -115,7 +115,7 @@ class SecurityController extends Controller
 
         if(is_null($restorer))//we finished and redirect, no output
         {
-            return $this->redirectToRoute('backend_homepage');
+            return $this->redirectToRoute('home');
         }
 
         $user = $restorer->getUser();
@@ -142,7 +142,7 @@ class SecurityController extends Controller
             $em->remove($restorer);
             $em->flush();
 
-            return $this->redirectToRoute('backend_homepage');
+            return $this->redirectToRoute('home');
         }
 
         return $this->render(
