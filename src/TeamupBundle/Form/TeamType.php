@@ -23,6 +23,7 @@ class TeamType extends AbstractType
                 'choices_as_values' => true))
             ->add('description', null,array('label' => 'Resumen Proyecto (por ejemplo: ideas, metas y necesidades)','attr' => array('class'=>'form-control')))
             ->add('neededs',CollectionType::class, array(
+                'label' => ' ',
                 'entry_type'    => NeededType::class,
                 'allow_add'     =>  true,
                 'allow_delete'  => true,

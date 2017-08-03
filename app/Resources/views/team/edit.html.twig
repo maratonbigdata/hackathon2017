@@ -7,9 +7,10 @@
 	    {{ form_start(edit_form) }}
 	        {{ form_row(edit_form.name) }}
 	        {{ form_row(edit_form.status) }}
+            {{ form_row(edit_form.description) }}
 
 	        <div class="panel panel-default" style="margin:10px 0 10px 10px;">
-	        	<div class="panel-heading">Se buscan...</div>
+	        	<div class="panel-heading">Miembros que se buscan para el equipo</div>
 	        	<div class="panel-body">
 			        <ul class="neededs" data-prototype="{{ form_widget(edit_form.neededs.vars.prototype)|e('html_attr') }}">
 			        	{% for needed in edit_form.neededs %}
@@ -18,7 +19,7 @@
 				    </ul>
 				</div>
 			</div>	        
-
+             {{ form_widget(edit_form) }}
 	        <input type="submit" class="btn btn1 btn-success" value="Guardar" />
 	    {{ form_end(edit_form) }}
 

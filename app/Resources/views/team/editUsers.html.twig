@@ -38,7 +38,7 @@
                             {% if is_granted('ROLE_ADMIN') %}
                                 <td><a href="{{ path('user_edit', { 'id': user.id }) }}" class="btn btn-primary btn-sm" role="button">Editar</a></td>
                             {% endif %}
-                            <td><a href="{{ path('team_eliminate_user', { 'tid': team.id, 'uid': user.id }) }}" class="btn btn-danger btn-sm" role="button">Eliminar</a></td>
+                            <td><a href="{{ path('team_eliminate_user', { 'tid': team.id, 'uid': user.id }) }}" data-toggle="tooltip" data-placement="top" title="Esto eliminará al miembro de su equipo y se le enviará una notificación, es irreversible." class="btn btn-danger btn-sm" role="button">Eliminar</a></td>
                         </td>
                     </tr>
                 {% endfor %}
@@ -53,7 +53,7 @@
             <div class="panel-body">  
                 {{ form_start(form) }}
                     {{ form_widget(form) }}
-                    <input type="submit" class="btn btn1 btn-success" value="Inscribir" />
+                    <input type="submit" class="btn btn1 btn-success" data-toggle="tooltip" data-placement="top" title="El usuario deberá loguearse al menos una vez para hacer su inscripción válida" value="Inscribir" />
                 {{ form_end(form) }}
 
             </div>
@@ -67,6 +67,8 @@
     <script type="text/javascript">
 
 window.onload = function() {
+
+    $('[data-toggle="tooltip"]').tooltip(); 
 
     addVerifierDigit();
 
