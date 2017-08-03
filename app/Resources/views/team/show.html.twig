@@ -44,5 +44,23 @@
     {% if  is_granted('ROLE_ADMIN')%}
         <input type="submit" value="Eliminar" class="btn btn-danger btn2" role="button">
     {% endif %}
+    <br>
+    <br>
+    <br>
+    <br>
+    {% if  team.status == 1 and team.id == app.user.team.id %}
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                Recuerda que para postular, tu equipo debe tener:
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li>al menos dos miembros</li>
+                    <li>a lo más cinco miembros</li>
+                    <li>todos los miembros deben haberse logueado al menos una vez en la plataforma</li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
 
 {% endblock %}

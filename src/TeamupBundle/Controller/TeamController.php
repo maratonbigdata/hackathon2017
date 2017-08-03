@@ -387,12 +387,12 @@ class TeamController extends Controller
 
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
-        if($currentUser->getTeam()->getId() != $team->getId() || $team->getId() != 1)
+        if($currentUser->getTeam()->getId() != $team->getId() || $team->getStatus() != 1)
         {
             return $this->redirectToRoute('home');
         }
 
-        if(count($team->getUsers() > 5 ))
+        if(count($team->getUsers()) > 5 )
         {
             $this->addFlash(
                 'notice',
@@ -402,10 +402,10 @@ class TeamController extends Controller
                     'message' => ' Su equipo debe tener a lo más 5 participantes. Por favor regularice esta situación antes de postular su equipo. '
                 )
             );
-            return $this->redirectToRoute('team_users_edit', array('id' => $team->getId()));
+            return $this->redirectToRoute('team_show', array('id' => $team->getId()));
         }
 
-        if(count($team->getUsers() < 2 ))
+        if(count($team->getUsers()) < 2 )
         {
             $this->addFlash(
                 'notice',
@@ -415,7 +415,7 @@ class TeamController extends Controller
                     'message' => ' Su equipo debe tener al menos 2 participantes. Por favor regularice esta situación antes de postular su equipo. '
                 )
             );
-            return $this->redirectToRoute('team_users_edit', array('id' => $team->getId()));
+            return $this->redirectToRoute('team_show', array('id' => $team->getId()));
         }
 
         $ok = true;

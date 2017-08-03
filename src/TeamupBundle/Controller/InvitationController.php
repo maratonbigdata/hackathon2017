@@ -48,11 +48,11 @@ class InvitationController extends Controller
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
-        if(!($user->hasTeam() && $user->getTeam()->getStatus == 1))
+        if(!($user->hasTeam() && $user->getTeam()->getStatus() == 1))
         {
             return $this->redirectToRoute('home');
         }
-        if(!($currentUser->hasTeam() && $currentUser->getTeam()->getStatus == 1))
+        if(!($currentUser->hasTeam() && $currentUser->getTeam()->getStatus() == 1))
         {
             return $this->redirectToRoute('home');
         }
