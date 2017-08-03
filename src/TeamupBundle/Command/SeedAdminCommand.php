@@ -30,10 +30,9 @@ class SeedAdminCommand extends ContainerAwareCommand
         $user->setBrief("Administrador");
         $user->setRole("ROLE_ADMIN");
         $user->setIsActive(false);
-        // Encode the password (you could also do this via Doctrine listener)
-        $password = $this->get('security.password_encoder')
-            ->encodePassword($user, 'aGxJEnmQOYy');
-        $user->setPassword($password);
+        $user->setOccupation('Administrador');
+
+        $user->setPassword('aGxJEnmQOYy');
 
         $rb = uniqid(rand(), true);
         $random = md5($user->getEmail().$rb);
@@ -50,8 +49,7 @@ class SeedAdminCommand extends ContainerAwareCommand
         $em->persist($restorer);
         $em->flush();
 
-        $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-        $url = $baseurl.'/activeAccount?token='.$random;
+        $url = '/activeAccount?token='.$random;
 
         $em->persist($user);
         $em->flush();

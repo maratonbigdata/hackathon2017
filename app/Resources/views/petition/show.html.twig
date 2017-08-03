@@ -4,7 +4,7 @@
     <h1>Solicitud</h1>
 
     {% if petition.sender.id == app.user.id %}
-        Has solicitado a {{petition.reciever.team.name}} ser parte de <strong>{{petition.reciever.team.name}}</strong>, ellos cuentan con los siguientes integrantes:
+        Has solicitado a {{petition.reciever.getFullname}} ser parte de <strong>{{petition.reciever.team.name}}</strong>, ellos cuentan con los siguientes integrantes:
 
         <ul>
             {% for user in petition.reciever.team.users %}

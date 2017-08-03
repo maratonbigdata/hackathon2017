@@ -46,7 +46,9 @@
 	                    {% endfor %}
 	                    <br><br>
                         <a href="{{path('invite',{id: users|first .id})}}" class="btn btn-success btn-sm" role="button">Invitar a mi equipo</a>
-                        <a href="{{path('ask',{id: users|first .id})}}" class="btn btn-info btn-sm" role="button">Solicitar unirse su equipo</a>
+                        {% if not users|first .hasRecievedPetitions(app.user) %}
+                            <a href="{{path('ask',{id: users|first .id})}}" class="btn btn-info btn-sm" role="button">Solicitar unirse su equipo</a>
+                        {% endif %}
                     </div>
                 </td>
             </tr>

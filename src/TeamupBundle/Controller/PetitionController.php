@@ -52,29 +52,33 @@ class PetitionController extends Controller
         {
             return $this->redirectToRoute('home');
         }
-        if(!($currentUser->hasTeam() && $currentUser->getTeam()->getStatus() == 1))
+        if($currentUser->hasTeam())
         {
-            return $this->redirectToRoute('home');
+            if($currentUser->getTeam()->getStatus() != 1)
+            {
+                return $this->redirectToRoute('home');
+            }
         }
 
-        $petition = new Petition();
-
-        $petition->setSender($currentUser);
-        $petition->setReciever($user);
-        $petition->setDate(new \DateTime());
-        $petition->setState(1);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($petition);
-        $em->flush();
-
         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-        $url = $baseurl.'/petition/'.$petition->getId();
 
         if($user->hasTeam())
         {
             foreach ($user->getTeam()->getUsers() as $member) 
             {
+                $petition = new Petition();
+
+                $petition->setSender($currentUser);
+                $petition->setReciever($member);
+                $petition->setDate(new \DateTime());
+                $petition->setState(1);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($petition);
+                $em->flush();
+
+                $url = $baseurl.'/petition/'.$petition->getId();
+
                 $message = \Swift_Message::newInstance()
                 ->setSubject('Les han solicitado unirse a su equipo!')
                 ->setFrom('gestionIPre@ing.puc.cl')
@@ -82,17 +86,30 @@ class PetitionController extends Controller
                 ->setBody('<html>' .
                     ' <head></head>' .
                     ' <body>' .
-                    ' Hola, un participante les ha solicitado a unirse a su equipo. <br>Para ver la solicitud, haga cl?k <a href="'.$url.'">aqu?/a><br><br>'.
+                    ' Hola, un participante les ha solicitado a unirse a su equipo. <br>Para ver la solicitud, haga clíck <a href="'.$url.'">aqu?/a><br><br>'.
                     'Recuerden que basta con que un miembro acepte la petici?<br><br>'.
                     ' TeamUp'.
                     '</html>',
                     'text/html')
-            ;
-            $this->get('mailer')->send($message);
+                ;
+                $this->get('mailer')->send($message);
             }
         }
         else
         {
+            $petition = new Petition();
+
+            $petition->setSender($currentUser);
+            $petition->setReciever($user);
+            $petition->setDate(new \DateTime());
+            $petition->setState(1);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($petition);
+            $em->flush();
+
+            $url = $baseurl.'/petition/'.$petition->getId();
+
             $message = \Swift_Message::newInstance()
                 ->setSubject('Nueva Solicitud!')
                 ->setFrom('gestionIPre@ing.puc.cl')
@@ -100,7 +117,7 @@ class PetitionController extends Controller
                 ->setBody('<html>' .
                     ' <head></head>' .
                     ' <body>' .
-                    ' Hola, un participante le ha solicitado a unirse a un equipo. <br>Para ver la solicitud, haga cl?k <a href="'.$url.'">aqu?/a><br><br>'.
+                    ' Hola, un participante le ha solicitado a unirse a un equipo. <br>Para ver la solicitud, haga clíck <a href="'.$url.'">aqu?/a><br><br>'.
                     ' TeamUp'.
                     '</html>',
                     'text/html')

@@ -72,8 +72,8 @@ class SecurityController extends Controller
 	    $resetForm = $this->createFormBuilder($user)
 	    	->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
-                'first_options'  => array('label' => 'Contraseña','attr' => array('disabled' => false, 'class'=>'form-control')),
-                'second_options' => array('label' => 'Repita Contraseña','attr' => array('disabled' => false, 'class'=>'form-control')),
+                'first_options'  => array('label' => 'ContraseÃ±a','attr' => array('disabled' => false, 'class'=>'form-control')),
+                'second_options' => array('label' => 'Repita ContraseÃ±a','attr' => array('disabled' => false, 'class'=>'form-control')),
                 ))
             ->getForm();
         $form = $request->get('form');
@@ -123,8 +123,8 @@ class SecurityController extends Controller
         $resetForm = $this->createFormBuilder($user)
             ->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
-                'first_options'  => array('label' => 'Contraseña','attr' => array('disabled' => false, 'class'=>'form-control')),
-                'second_options' => array('label' => 'Repita Contraseña','attr' => array('disabled' => false, 'class'=>'form-control')),
+                'first_options'  => array('label' => 'ContraseÃ±a','attr' => array('disabled' => false, 'class'=>'form-control')),
+                'second_options' => array('label' => 'Repita ContraseÃ±a','attr' => array('disabled' => false, 'class'=>'form-control')),
                 ))
             ->getForm();
         $form = $request->get('form');
@@ -190,16 +190,16 @@ class SecurityController extends Controller
 	    		$url = $baseurl.'/resetPassword?token='.$random;
 
 	    		$message = \Swift_Message::newInstance()
-					->setSubject('Recuperación de contraseña')
+					->setSubject('RecuperaciÃ³n de contraseÃ±a')
 					->setFrom('gestionIPre@ing.puc.cl')
 					->setTo(array($user->getEmail()))
 					->setBody('<html>' .
 					    ' <head></head>' .
 					    ' <body>' .
-					    ' Hola, usa este link para recuperar tu contraseña: ' .
+					    ' Hola, usa este link para recuperar tu contraseÃ±a: ' .
 					    '<a href="'.$url.'">'.$url.'</a>'.
-                        'Este link funciona solo una vez, si tiene problemas pide una nueva recuperación.</br>'.
-					    ' Si no pediste recuperar contraseña omite este email. (No responda este email)</body>' .
+                        'Este link funciona solo una vez, si tiene problemas pide una nueva recuperaciÃ³n.</br>'.
+					    ' Si no pediste recuperar contraseÃ±a omite este email. (No responda este email)</body>' .
 					    '</html>',
 					    'text/html')
 				;
@@ -295,7 +295,7 @@ class SecurityController extends Controller
                     ->setBody('<html>' .
                         ' <head></head>' .
                         ' <body>' .
-                        ' Hola, usa este link para terminar tu inscripción y generar tu contraseña: ' .
+                        ' Hola, usa este link para terminar tu inscripciÃ³n y generar tu contraseÃ±a: ' .
                         '<a href="'.$url.'">'.$url.'</a></br>'.
                         ' Si no pediste una cuenta nueva, te invitamos a conocernos. (No responda este email)</body>' .
                         '</html>',
@@ -311,7 +311,7 @@ class SecurityController extends Controller
                     array(
                         'alert' => 'danger',// danger, warning, info, success
                         'title' => 'Duplicado: ',
-                        'message' => 'Uno o mas datos pertenecen a un usuario existente, intente nuevamente o Inicie Sesión'
+                        'message' => 'Uno o mas datos pertenecen a un usuario existente, intente nuevamente o Inicie SesiÃ³n'
                     )
                 );
 

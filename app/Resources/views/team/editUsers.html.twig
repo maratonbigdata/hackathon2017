@@ -9,7 +9,6 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Nombre</th>
                         <th>Apellido</th>
                         <th>Rut</th>
@@ -22,7 +21,6 @@
                 <tbody>
                 {% for user in team.users %}
                     <tr>
-                        <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.id }}</a></td>
                         <td>{{ user.name }}</td>
                         <td>{{ user.lastname }}</td>
                         <td>{{ user.rut }}</td>

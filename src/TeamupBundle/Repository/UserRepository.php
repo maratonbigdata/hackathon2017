@@ -16,9 +16,9 @@ class UserRepository extends EntityRepository
 	{
 		$query = $this->getEntityManager()
             ->createQuery(
-                'SELECT u FROM TeamupBundle:User u
-                WHERE u.team IS NULL AND u.id != :currentUserId
-                '
+                "SELECT u FROM TeamupBundle:User u
+                WHERE u.team IS NULL AND u.id != :currentUserId AND u.role != 'ROLE_ADMIN'
+                "
             )->setParameter('currentUserId', $currentUser->getId());
      
         try 

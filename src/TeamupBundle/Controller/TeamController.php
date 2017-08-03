@@ -89,6 +89,7 @@ class TeamController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) 
         {
+            $team->setStatus(1);
             $team->setCreated(new \DateTime());
             $em = $this->getDoctrine()->getManager();
 
@@ -419,16 +420,16 @@ class TeamController extends Controller
         }
 
         $ok = true;
-        $inactives = "";
+        $inactives = '';
         //revisar que todos hayan aceptado
         foreach ($team->getUsers() as $user) 
         {        
             if(!$user->getIsActive())
             {
                 if(!$ok)
-                    $inactives += ", ";
+                    $inactives .= ", ";
 
-                $inactives += $user->getFullName();
+                $inactives .= $user->getFullName();
                 $ok = false;
             }
         }
@@ -440,7 +441,7 @@ class TeamController extends Controller
                 array(
                     'alert' => 'danger',// danger, warning, info, success
                     'title' => 'Error al postular: ',
-                    'message' => $inactives.' aún no han iniciado sesión (fueron agregados por un tercero). Por favor pónganse en contacto con ellos para que ingresen almenos una vez a la plataforma. '
+                    'message' => 'Uno o más usuarios que fueron agregados por un tercero aún no han iniciado sesión ('.$inactives.'). Por favor pónganse en contacto con ellos para que ingresen almenos una vez a la plataforma. '
                 )
             );
             return $this->redirectToRoute('team_show', array('id' => $team->getId()));

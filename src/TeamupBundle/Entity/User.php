@@ -901,6 +901,23 @@ class User implements AdvancedUserInterface, \Serializable
     }
 
     /**
+     * Get recievedPetitions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function hasRecievedPetitions($user)
+    {
+        $has = false;
+
+        foreach ($this->recievedPetitions as $petition) 
+        {
+            if($petition->getSender()->getId() == $user->getId())
+                $has = false;
+        }
+        return $has;
+    }
+
+    /**
      * Set occupation
      *
      * @param string $occupation

@@ -6,7 +6,6 @@
     <div class="panel panel-default" style="padding:10px;">
 	    {{ form_start(edit_form) }}
 	        {{ form_row(edit_form.name) }}
-	        {{ form_row(edit_form.status) }}
             {{ form_row(edit_form.description) }}
 
 	        <div class="panel panel-default" style="margin:10px 0 10px 10px;">
@@ -25,7 +24,7 @@
 
 	    <a href="{{ path('team_index') }}" class="btn btn-info btn2" role="button" >Equipos</a>
 
-	    <a href="{{ path('team_users_edit', { 'id': team.id }) }}" class="btn btn-primary btn2" role="button" >Editar Miembros del Equipo</a>
+	    <a href="{{ path('team_users_edit', { 'id': team.id }) }}" class="btn btn-primary btn2" role="button" >Editar/Inscribir Miembros del Equipo</a>
 	</div>
 
 
