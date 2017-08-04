@@ -6,7 +6,13 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Mensajes con:</th>
+                <th>
+                    {% if usersWithMessages|length == 0%}
+                        No hay mensajes para mostrar
+                    {% else %}
+                        Mensajes con:
+                    {% endif %}
+                </th>
                 <th></th>
             </tr>
         </thead>

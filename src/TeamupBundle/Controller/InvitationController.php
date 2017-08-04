@@ -48,33 +48,42 @@ class InvitationController extends Controller
     {
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
-        if(!($user->hasTeam() && $user->getTeam()->getStatus() == 1))
+        if($user->hasTeam())
         {
-            return $this->redirectToRoute('home');
+            if($user->getTeam()->getStatus() != 1)
+            {
+                echo 1;
+                die();
+                return $this->redirectToRoute('home');
+            } 
         }
-        if(!($currentUser->hasTeam() && $currentUser->getTeam()->getStatus() == 1))
+
+        if($currentUser->hasTeam())
         {
-            return $this->redirectToRoute('home');
+            if($currentUser->getTeam()->getStatus() != 1)
+            {
+                return $this->redirectToRoute('home');
+            }
         }
-
-        $invitation = new Invitation();
-
-        $invitation->setSender($currentUser);
-        $invitation->setReciever($user);
-        $invitation->setDate(new \DateTime());
-        $invitation->setState(1);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($invitation);
-        $em->flush();
 
         $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-        $url = $baseurl.'/invitation/'.$invitation->getId();
 
         if($user->hasTeam())
         {
             foreach ($user->getTeam()->getUsers() as $member) 
             {
+                $invitation = new Invitation();
+
+                $invitation->setSender($currentUser);
+                $invitation->setReciever($member);
+                $invitation->setDate(new \DateTime());
+                $invitation->setState(1);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($invitation);
+                $em->flush();
+
+                $url = $baseurl.'/invitation/'.$invitation->getId();
                 $message = \Swift_Message::newInstance()
                 ->setSubject('Les han invitado a un equipo!')
                 ->setFrom('gestionIPre@ing.puc.cl')
@@ -93,6 +102,18 @@ class InvitationController extends Controller
         }
         else
         {
+            $invitation = new Invitation();
+
+            $invitation->setSender($currentUser);
+            $invitation->setReciever($user);
+            $invitation->setDate(new \DateTime());
+            $invitation->setState(1);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($invitation);
+            $em->flush();
+            
+            $url = $baseurl.'/invitation/'.$invitation->getId();
             $message = \Swift_Message::newInstance()
                 ->setSubject('Te han invitado a un equipo!')
                 ->setFrom('gestionIPre@ing.puc.cl')

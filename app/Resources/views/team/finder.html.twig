@@ -45,9 +45,19 @@
                     		<button type="button" class="btn btn-default btn-xs">{{interest}}</button>
 	                    {% endfor %}
 	                    <br><br>
-                        <a href="{{path('invite',{id: users|first .id})}}" class="btn btn-success btn-sm" role="button">Invitar a mi equipo</a>
+                        {% if app.user.hasTeam %}
+                            {% if not users|first .hasRecievedInvitations(app.user) %}
+                                <a href="{{path('invite',{id: users|first .id})}}" class="btn btn-success btn-sm" role="button">Invitar a mi equipo</a>
+                            {% else %}
+                                <a href="#" class="btn btn-success disabled btn-sm" role="button">Invitación enviada</a>
+                            {% endif %}
+
+                        {% endif %}
+
                         {% if not users|first .hasRecievedPetitions(app.user) %}
                             <a href="{{path('ask',{id: users|first .id})}}" class="btn btn-info btn-sm" role="button">Solicitar unirse su equipo</a>
+                        {% else %}
+                            <a href="#" class="btn btn-info disabled btn-sm" role="button">Solicitud enviada</a>
                         {% endif %}
                     </div>
                 </td>

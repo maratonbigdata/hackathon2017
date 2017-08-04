@@ -912,7 +912,24 @@ class User implements AdvancedUserInterface, \Serializable
         foreach ($this->recievedPetitions as $petition) 
         {
             if($petition->getSender()->getId() == $user->getId())
-                $has = false;
+                $has = true;
+        }
+        return $has;
+    }
+
+    /**
+     * Get recievedInvitation
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function hasRecievedInvitations($user)
+    {
+        $has = false;
+
+        foreach ($this->recievedInvitations as $invitation) 
+        {
+            if($invitation->getSender()->getId() == $user->getId())
+                $has = true;
         }
         return $has;
     }

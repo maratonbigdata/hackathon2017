@@ -26,7 +26,9 @@
                             <span class="sr-only"></span>
                           </div>
                         </div>
-                        <a href="{{path('invite',{id: user.id})}}" class="btn btn-success btn-sm" role="button">Invitar a mi grupo</a>
+                        {% if not user.hasRecievedInvitations(app.user) %}
+                            <a href="{{path('invite',{id: user.id})}}" class="btn btn-success btn-sm" role="button">Invitar a mi grupo</a>
+                        {% endif %}
                         <a href="{{path('chat',{id: user.id})}}" target="_blank" class="btn btn-primary btn-sm" role="button">Enviar Mensaje</a>
                     </div>
                 </td>
