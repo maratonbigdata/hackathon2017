@@ -81,7 +81,7 @@ class PetitionController extends Controller
 
                 $message = \Swift_Message::newInstance()
                 ->setSubject('Les han solicitado unirse a su equipo!')
-                ->setFrom('gestionIPre@ing.puc.cl')
+                ->setFrom('maratonbigdata@uc.cl')
                 ->setTo(array($member->getEmail()))
                 ->setBody('<html>' .
                     ' <head></head>' .
@@ -112,7 +112,7 @@ class PetitionController extends Controller
 
             $message = \Swift_Message::newInstance()
                 ->setSubject('Nueva Solicitud!')
-                ->setFrom('gestionIPre@ing.puc.cl')
+                ->setFrom('maratonbigdata@uc.cl')
                 ->setTo(array($user->getEmail()))
                 ->setBody('<html>' .
                     ' <head></head>' .
@@ -205,7 +205,7 @@ class PetitionController extends Controller
                         $url = $baseurl.'/team/'.$recievedTeam->getId();
                         $message = \Swift_Message::newInstance()
                             ->setSubject('Han sido aceptados en el equipo '.$recievedTeam->getName())
-                            ->setFrom('gestionIPre@ing.puc.cl')
+                            ->setFrom('maratonbigdata@uc.cl')
                             ->setTo(array($member->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
@@ -237,7 +237,7 @@ class PetitionController extends Controller
                         $url = $baseurl.'/team/'.$recievedTeam->getId();
                         $message = \Swift_Message::newInstance()
                             ->setSubject('Han aceptado tu solicitud!')
-                            ->setFrom('gestionIPre@ing.puc.cl')
+                            ->setFrom('maratonbigdata@uc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
@@ -256,7 +256,7 @@ class PetitionController extends Controller
                         $url = $baseurl.'/team/'.$recievedTeam->getId();
                         $message = \Swift_Message::newInstance()
                             ->setSubject('Han aceptado tu solicitud!')
-                            ->setFrom('gestionIPre@ing.puc.cl')
+                            ->setFrom('maratonbigdata@uc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
@@ -281,7 +281,7 @@ class PetitionController extends Controller
                         $url = $baseurl.'/team/'.$petition->getSender()->getTeam()->getId();
                         $message = \Swift_Message::newInstance()
                             ->setSubject('Han rechazado tu solicitud')
-                            ->setFrom('gestionIPre@ing.puc.cl')
+                            ->setFrom('maratonbigdata@uc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
@@ -300,7 +300,7 @@ class PetitionController extends Controller
                         $url = $baseurl.'/team/'.$recievedTeam->getId();
                         $message = \Swift_Message::newInstance()
                             ->setSubject('Han rechazado tu solicitud')
-                            ->setFrom('gestionIPre@ing.puc.cl')
+                            ->setFrom('maratonbigdata@uc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .

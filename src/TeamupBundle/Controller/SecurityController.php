@@ -191,7 +191,7 @@ class SecurityController extends Controller
 
 	    		$message = \Swift_Message::newInstance()
 					->setSubject('Recuperación de contraseña')
-					->setFrom('gestionIPre@ing.puc.cl')
+					->setFrom('maratonbigdata@uc.cl')
 					->setTo(array($user->getEmail()))
 					->setBody('<html>' .
 					    ' <head></head>' .
@@ -290,7 +290,7 @@ class SecurityController extends Controller
 
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Bienvenido a Team Up, Activa tu cuenta')
-                    ->setFrom('gestionIPre@ing.puc.cl')
+                    ->setFrom('maratonbigdata@uc.cl')
                     ->setTo(array($user->getEmail()))
                     ->setBody('<html>' .
                         ' <head></head>' .

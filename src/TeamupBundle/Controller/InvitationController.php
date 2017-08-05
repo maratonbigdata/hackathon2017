@@ -86,7 +86,7 @@ class InvitationController extends Controller
                 $url = $baseurl.'/invitation/'.$invitation->getId();
                 $message = \Swift_Message::newInstance()
                 ->setSubject('Les han invitado a un equipo!')
-                ->setFrom('gestionIPre@ing.puc.cl')
+                ->setFrom('maratonbigdata@uc.cl')
                 ->setTo(array($member->getEmail()))
                 ->setBody('<html>' .
                     ' <head></head>' .
@@ -116,7 +116,7 @@ class InvitationController extends Controller
             $url = $baseurl.'/invitation/'.$invitation->getId();
             $message = \Swift_Message::newInstance()
                 ->setSubject('Te han invitado a un equipo!')
-                ->setFrom('gestionIPre@ing.puc.cl')
+                ->setFrom('maratonbigdata@uc.cl')
                 ->setTo(array($user->getEmail()))
                 ->setBody('<html>' .
                     ' <head></head>' .
@@ -209,7 +209,7 @@ class InvitationController extends Controller
                         $url = $baseurl.'/team/'.$team->getId();
                         $message = \Swift_Message::newInstance()
                             ->setSubject('Has sido agregado a un equipo!')
-                            ->setFrom('gestionIPre@ing.puc.cl')
+                            ->setFrom('maratonbigdata@uc.cl')
                             ->setTo(array($member->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
@@ -240,7 +240,7 @@ class InvitationController extends Controller
                         $url = $baseurl.'/team/'.$team->getId();
                         $message = \Swift_Message::newInstance()
                             ->setSubject('Han aceptado tu invitación!')
-                            ->setFrom('gestionIPre@ing.puc.cl')
+                            ->setFrom('maratonbigdata@uc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
@@ -259,7 +259,7 @@ class InvitationController extends Controller
                         $url = $baseurl.'/team/'.$team->getId();
                         $message = \Swift_Message::newInstance()
                             ->setSubject('Han aceptado tu invitación!')
-                            ->setFrom('gestionIPre@ing.puc.cl')
+                            ->setFrom('maratonbigdata@uc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
@@ -284,7 +284,7 @@ class InvitationController extends Controller
                         $url = $baseurl.'/team/'.$team->getId();
                         $message = \Swift_Message::newInstance()
                             ->setSubject('Han rechazado tu invitación')
-                            ->setFrom('gestionIPre@ing.puc.cl')
+                            ->setFrom('maratonbigdata@uc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
@@ -303,7 +303,7 @@ class InvitationController extends Controller
                         $url = $baseurl.'/team/'.$team->getId();
                         $message = \Swift_Message::newInstance()
                             ->setSubject('Han rechazado tu invitación')
-                            ->setFrom('gestionIPre@ing.puc.cl')
+                            ->setFrom('maratonbigdata@uc.cl')
                             ->setTo(array($user->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
@@ -328,7 +328,7 @@ class InvitationController extends Controller
                         $url = $baseurl.'/invitation/'.$invitation->getId();
                         $message = \Swift_Message::newInstance()
                             ->setSubject('Te han vuelto a invitar a un equipo!')
-                            ->setFrom('gestionIPre@ing.puc.cl')
+                            ->setFrom('maratonbigdata@uc.cl')
                             ->setTo(array($member->getEmail()))
                             ->setBody('<html>' .
                                 ' <head></head>' .
@@ -348,7 +348,7 @@ class InvitationController extends Controller
                     $url = $baseurl.'/invitation/'.$invitation->getId();
                     $message = \Swift_Message::newInstance()
                         ->setSubject('Te han vuelto a invitar a un equipo!')
-                        ->setFrom('gestionIPre@ing.puc.cl')
+                        ->setFrom('maratonbigdata@uc.cl')
                         ->setTo(array($member->getEmail()))
                         ->setBody('<html>' .
                             ' <head></head>' .
