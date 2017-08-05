@@ -156,6 +156,8 @@ class PetitionController extends Controller
      */
     public function changeStateAction(Request $request, Petition $petition, $state)
     {
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        
         if(!($petition->getSender()->getId() == $currentUser->getId() || $petition->getReciever()->getId() == $currentUser->getId()) )
         {
             return $this->redirectToRoute('home');

@@ -160,6 +160,8 @@ class InvitationController extends Controller
      */
     public function changeStateAction(Request $request, Invitation $invitation, $state)
     {
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        
         if(!($invitation->getSender()->getId() == $currentUser->getId() || $invitation->getReciever()->getId() == $currentUser->getId()) )
         {
             return $this->redirectToRoute('home');
