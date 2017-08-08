@@ -155,13 +155,32 @@ div#teamupbundle_user_occupation label
   margin-right: 7px;
 }
 
+h1, h2, h3, h4, h5, h6, p, ahtml,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td,caption,cite,code,ol,ul,caption,th
+{
+  font-family: 'Open Sans', sans-serif !important;
+  color: #646569;
+}
 
+.navbar-inverse {
+    background-color: #01549f;
+    border-color: #014582;
+}
 
+.navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav>li>a
+{
+  color:#fff !important;
+}
 
+.navbar-inverse .navbar-brand
+{
+  font-size: 35px;
+}
 
-
-
-
+.btn-primary {
+    color: #fff;
+    background-color: #01549f;
+    border-color: #2e6da4;
+}
 
 
 
