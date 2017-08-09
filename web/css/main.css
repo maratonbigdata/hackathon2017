@@ -164,6 +164,7 @@ h1, h2, h3, h4, h5, h6, p, ahtml,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pr
 .navbar-inverse {
     background-color: #01549f;
     border-color: #014582;
+    border-radius: 0px;
 }
 
 .navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav>li>a
@@ -182,7 +183,40 @@ h1, h2, h3, h4, h5, h6, p, ahtml,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pr
     border-color: #2e6da4;
 }
 
+.btn-success {
+    color: #fff;
+    background-color: #01549f;
+    border-color: #2e6da4;
+}
 
+.btn-info {
+    color: #fff;
+    background-color: #01549f;
+    border-color: #2e6da4;
+}
+
+.btn-success {
+    color: #fff;
+    background-color: ##FF6702;
+    border-color: ##FF6702;
+}
+
+.btn-warning {
+    color: #fff;
+    background-color: ##FF6702;
+    border-color: ##FF6702;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: ##FF6702;
+    border-color: ##FF6702;
+}
+
+.glyphicon
+{
+  color: #ff6702;
+}
 
 
 
