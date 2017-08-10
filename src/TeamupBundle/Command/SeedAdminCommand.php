@@ -56,7 +56,7 @@ class SeedAdminCommand extends ContainerAwareCommand
 
         $message = \Swift_Message::newInstance()
             ->setSubject('Bienvenido a Team Up!')
-            ->setFrom('maratonbigdata@uc.cl')
+            ->setFrom('gestionipre@ing.puc.cl')
             ->setTo(array($user->getEmail()))
             ->setBody('<html>' .
                 ' <head></head>' .

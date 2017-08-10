@@ -1,0 +1,164 @@
+Searching 8221 files for "hackathon@uc.cl"
+
+0 matches
+
+Searching 8221 files for "@uc.cl"
+
+/Users/erick/Documents/hackaton/hackathon2017/app/logs/dev.log:
+   49  [2017-08-08 04:20:27] request.INFO: Matched route "_wdt". {"route_parameters":{"_controller":"web_profiler.controller.profiler:toolbarAction","token":"8c9326","_route":"_wdt"},"request_uri":"http://localhost:8000/_wdt/8c9326"} []
+   50  [2017-08-08 04:20:30] request.INFO: Matched route "login_check". {"route_parameters":{"_controller":"TeamupBundle\\Controller\\SecurityController::loginCheckAction","_route":"login_check"},"request_uri":"http://localhost:8000/login_check"} []
+   51: [2017-08-08 04:20:31] doctrine.DEBUG: SELECT t0.id AS id1, t0.name AS name2, t0.lastname AS lastname3, t0.rut AS rut4, t0.email AS email5, t0.brief AS brief6, t0.role AS role7, t0.password AS password8, t0.is_active AS is_active9, t0.occupation AS occupation10, t0.university AS university11, t0.carrer AS carrer12, t0.signed AS signed13, t0.team_id AS team_id14, t15.id AS id16, t15.time AS time17, t15.auth AS auth18, t15.user_id AS user_id19, t0.profile_id AS profile_id20 FROM user t0 LEFT JOIN restorer t15 ON t15.user_id = t0.id WHERE t0.email = ? LIMIT 1 ["evsvec@uc.cl"] []
+   52  [2017-08-08 04:20:32] security.INFO: Authentication request failed. {"exception":"[object] (Symfony\\Component\\Security\\Core\\Exception\\DisabledException(code: 0): User account is disabled. at /Users/erick/Documents/hackaton/hackathon2017/vendor/symfony/symfony/src/Symfony/Component/Security/Core/User/UserChecker.php:42)"} []
+   53  [2017-08-08 04:20:32] security.DEBUG: Authentication failure, redirect triggered. {"failure_path":"/login"} []
+
+/Users/erick/Documents/hackaton/hackathon2017/app/Resources/views/security/lostPassword.html.twig:
+   36      if (!valid)
+   37      {
+   38:         alert("Esta no es una dirección de correo válida (p.e. maratonbigdata@uc.cl)");
+   39      }
+   40      return valid;
+
+/Users/erick/Documents/hackaton/hackathon2017/src/TeamupBundle/Command/SeedAdminCommand.php:
+   27          $user->setLastname("Svec");
+   28          $user->setRut(16094040);
+   29:         $user->setEmail("evsvec@uc.cl");
+   30          $user->setBrief("Administrador");
+   31          $user->setRole("ROLE_ADMIN");
+   ..
+   57          $message = \Swift_Message::newInstance()
+   58              ->setSubject('Bienvenido a Team Up!')
+   59:             ->setFrom('maratonbigdata@uc.cl')
+   60              ->setTo(array($user->getEmail()))
+   61              ->setBody('<html>' .
+
+/Users/erick/Documents/hackaton/hackathon2017/src/TeamupBundle/Controller/InvitationController.php:
+   87                  $message = \Swift_Message::newInstance()
+   88                  ->setSubject('Les han invitado a un equipo!')
+   89:                 ->setFrom('maratonbigdata@uc.cl')
+   90                  ->setTo(array($member->getEmail()))
+   91                  ->setBody('<html>' .
+   ..
+  117              $message = \Swift_Message::newInstance()
+  118                  ->setSubject('Te han invitado a un equipo!')
+  119:                 ->setFrom('maratonbigdata@uc.cl')
+  120                  ->setTo(array($user->getEmail()))
+  121                  ->setBody('<html>' .
+  ...
+  210                          $message = \Swift_Message::newInstance()
+  211                              ->setSubject('Has sido agregado a un equipo!')
+  212:                             ->setFrom('maratonbigdata@uc.cl')
+  213                              ->setTo(array($member->getEmail()))
+  214                              ->setBody('<html>' .
+  ...
+  241                          $message = \Swift_Message::newInstance()
+  242                              ->setSubject('Han aceptado tu invitación!')
+  243:                             ->setFrom('maratonbigdata@uc.cl')
+  244                              ->setTo(array($user->getEmail()))
+  245                              ->setBody('<html>' .
+  ...
+  260                          $message = \Swift_Message::newInstance()
+  261                              ->setSubject('Han aceptado tu invitación!')
+  262:                             ->setFrom('maratonbigdata@uc.cl')
+  263                              ->setTo(array($user->getEmail()))
+  264                              ->setBody('<html>' .
+  ...
+  285                          $message = \Swift_Message::newInstance()
+  286                              ->setSubject('Han rechazado tu invitación')
+  287:                             ->setFrom('maratonbigdata@uc.cl')
+  288                              ->setTo(array($user->getEmail()))
+  289                              ->setBody('<html>' .
+  ...
+  304                          $message = \Swift_Message::newInstance()
+  305                              ->setSubject('Han rechazado tu invitación')
+  306:                             ->setFrom('maratonbigdata@uc.cl')
+  307                              ->setTo(array($user->getEmail()))
+  308                              ->setBody('<html>' .
+  ...
+  329                          $message = \Swift_Message::newInstance()
+  330                              ->setSubject('Te han vuelto a invitar a un equipo!')
+  331:                             ->setFrom('maratonbigdata@uc.cl')
+  332                              ->setTo(array($member->getEmail()))
+  333                              ->setBody('<html>' .
+  ...
+  349                      $message = \Swift_Message::newInstance()
+  350                          ->setSubject('Te han vuelto a invitar a un equipo!')
+  351:                         ->setFrom('maratonbigdata@uc.cl')
+  352                          ->setTo(array($member->getEmail()))
+  353                          ->setBody('<html>' .
+
+/Users/erick/Documents/hackaton/hackathon2017/src/TeamupBundle/Controller/PetitionController.php:
+   82                  $message = \Swift_Message::newInstance()
+   83                  ->setSubject('Les han solicitado unirse a su equipo!')
+   84:                 ->setFrom('maratonbigdata@uc.cl')
+   85                  ->setTo(array($member->getEmail()))
+   86                  ->setBody('<html>' .
+   ..
+  113              $message = \Swift_Message::newInstance()
+  114                  ->setSubject('Nueva Solicitud!')
+  115:                 ->setFrom('maratonbigdata@uc.cl')
+  116                  ->setTo(array($user->getEmail()))
+  117                  ->setBody('<html>' .
+  ...
+  206                          $message = \Swift_Message::newInstance()
+  207                              ->setSubject('Han sido aceptados en el equipo '.$recievedTeam->getName())
+  208:                             ->setFrom('maratonbigdata@uc.cl')
+  209                              ->setTo(array($member->getEmail()))
+  210                              ->setBody('<html>' .
+  ...
+  238                          $message = \Swift_Message::newInstance()
+  239                              ->setSubject('Han aceptado tu solicitud!')
+  240:                             ->setFrom('maratonbigdata@uc.cl')
+  241                              ->setTo(array($user->getEmail()))
+  242                              ->setBody('<html>' .
+  ...
+  257                          $message = \Swift_Message::newInstance()
+  258                              ->setSubject('Han aceptado tu solicitud!')
+  259:                             ->setFrom('maratonbigdata@uc.cl')
+  260                              ->setTo(array($user->getEmail()))
+  261                              ->setBody('<html>' .
+  ...
+  282                          $message = \Swift_Message::newInstance()
+  283                              ->setSubject('Han rechazado tu solicitud')
+  284:                             ->setFrom('maratonbigdata@uc.cl')
+  285                              ->setTo(array($user->getEmail()))
+  286                              ->setBody('<html>' .
+  ...
+  301                          $message = \Swift_Message::newInstance()
+  302                              ->setSubject('Han rechazado tu solicitud')
+  303:                             ->setFrom('maratonbigdata@uc.cl')
+  304                              ->setTo(array($user->getEmail()))
+  305                              ->setBody('<html>' .
+
+/Users/erick/Documents/hackaton/hackathon2017/src/TeamupBundle/Controller/SecurityController.php:
+  192  	    		$message = \Swift_Message::newInstance()
+  193  					->setSubject('Recuperación de contraseña')
+  194: 					->setFrom('maratonbigdata@uc.cl')
+  195  					->setTo(array($user->getEmail()))
+  196  					->setBody('<html>' .
+  ...
+  291                  $message = \Swift_Message::newInstance()
+  292                      ->setSubject('Bienvenido a Team Up, Activa tu cuenta')
+  293:                     ->setFrom('maratonbigdata@uc.cl')
+  294                      ->setTo(array($user->getEmail()))
+  295                      ->setBody('<html>' .
+
+/Users/erick/Documents/hackaton/hackathon2017/src/TeamupBundle/Controller/TeamController.php:
+  287                  $message = \Swift_Message::newInstance()
+  288                      ->setSubject('Bienvenido a Team Up!')
+  289:                     ->setFrom('maratonbigdata@uc.cl')
+  290                      ->setTo(array($user->getEmail()))
+  291                      ->setBody('<html>' .
+  ...
+  359          $message = \Swift_Message::newInstance()
+  360                      ->setSubject('Actualizaci? TeamUp')
+  361:                     ->setFrom('maratonbigdata@uc.cl')
+  362                      ->setTo(array($user->getEmail()))
+  363                      ->setBody('<html>' .
+  ...
+  502              $message = \Swift_Message::newInstance()
+  503                          ->setSubject('Equipo postulado')
+  504:                         ->setFrom('maratonbigdata@uc.cl')
+  505                          ->setTo(array($user->getEmail()))
+  506                          ->setBody('<html>' .
+
+25 matches across 7 files

@@ -286,7 +286,7 @@ class TeamController extends Controller
 
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Bienvenido a Team Up!')
-                    ->setFrom('maratonbigdata@uc.cl')
+                    ->setFrom('gestionipre@ing.puc.cl')
                     ->setTo(array($user->getEmail()))
                     ->setBody('<html>' .
                         ' <head></head>' .
@@ -358,7 +358,7 @@ class TeamController extends Controller
 
         $message = \Swift_Message::newInstance()
                     ->setSubject('Actualizaci? TeamUp')
-                    ->setFrom('maratonbigdata@uc.cl')
+                    ->setFrom('gestionipre@ing.puc.cl')
                     ->setTo(array($user->getEmail()))
                     ->setBody('<html>' .
                         ' <head></head>' .
@@ -501,7 +501,7 @@ class TeamController extends Controller
             // enviar mensaje 
             $message = \Swift_Message::newInstance()
                         ->setSubject('Equipo postulado')
-                        ->setFrom('maratonbigdata@uc.cl')
+                        ->setFrom('gestionipre@ing.puc.cl')
                         ->setTo(array($user->getEmail()))
                         ->setBody('<html>' .
                             ' <head></head>' .
