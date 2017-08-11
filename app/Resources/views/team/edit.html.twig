@@ -64,7 +64,31 @@ jQuery(document).ready(function()
         allowClear: false,
         width: '100%'
     })
+
+    $(':input[type="number"]').on('change',function(){
+        if(!isValidCountMembers())
+        {
+            $(this).val(0);
+        }
+    });
 });
+
+function isValidCountMembers()
+{
+    var totalEquipo = {{ team.getUsers | length}};
+    var totalPedidos = 0;
+    $(':input[type="number"]').each(function(){
+        totalPedidos += parseInt($(this).val());
+    });
+
+    if(totalPedidos+totalEquipo > 5)
+    {
+        alert("Los equipos deben tener a lo más 5 participantes, si pide tantos miembros sobrepasará ese máximo");
+        return false;
+    }
+
+    return true;
+}
 
 function addNeededForm($collectionHolder, $newLinkLi) 
 {
