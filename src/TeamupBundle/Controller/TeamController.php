@@ -247,7 +247,7 @@ class TeamController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $user = new User();
-        $form = $this->createForm('TeamupBundle\Form\UserType', $user);
+        $form = $this->createForm('TeamupBundle\Form\UserSimpleType', $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) 
@@ -420,16 +420,16 @@ class TeamController extends Controller
         }
 
         $ok = true;
-        $inactives = '';
+        $rutless = '';
         //revisar que todos hayan aceptado
         foreach ($team->getUsers() as $user) 
         {        
-            if(!$user->getIsActive())
+            if(is_null($user->getRut()) )
             {
                 if(!$ok)
-                    $inactives .= ", ";
+                    $rutless .= ", ";
 
-                $inactives .= $user->getFullName();
+                $rutless .= $user->getFullName();
                 $ok = false;
             }
         }
@@ -441,7 +441,7 @@ class TeamController extends Controller
                 array(
                     'alert' => 'danger',// danger, warning, info, success
                     'title' => 'Error al postular: ',
-                    'message' => 'Uno o más usuarios que fueron agregados por un tercero aún no han iniciado sesión ('.$inactives.'). Por favor pónganse en contacto con ellos para que ingresen almenos una vez a la plataforma. '
+                    'message' => 'Uno o más usuarios aún no completan información básica como su rut ('.$rutless.'). Por favor pónganse en contacto con ellos para que ingresen su información personal antes de postular. '
                 )
             );
             return $this->redirectToRoute('team_show', array('id' => $team->getId()));

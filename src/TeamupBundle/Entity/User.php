@@ -43,7 +43,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @var int
      *
-     * @ORM\Column(name="rut", type="integer", unique=true)
+     * @ORM\Column(name="rut", type="integer", unique=true, nullable=true)
      */
     private $rut;
 

@@ -90,7 +90,7 @@ class SecurityController extends Controller
             $em->remove($restorer);
             $em->flush();
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('login');
 	    }
 
 	    return $this->render(
@@ -142,13 +142,23 @@ class SecurityController extends Controller
             $em->remove($restorer);
             $em->flush();
 
-            return $this->redirectToRoute('home');
+            $this->addFlash(
+                'notice',
+                array(
+                    'alert' => 'success',// danger, warning, info, success
+                    'title' => 'Felicitaciones: ',
+                    'message' => 'Contraseña guardada con éxito, ahora puede iniciar sesión'
+                )
+            );
+
+            return $this->redirectToRoute('user_edit', array('id' => $user->getId()));
         }
 
         return $this->render(
             'security/activeAccount.html.twig',
             array(
                 'reset_form' => $resetForm->createView(),
+                'active' => $user->getIsActive()
             )
         );
     }
