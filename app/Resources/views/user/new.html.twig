@@ -25,22 +25,6 @@ window.onload = function() {
         width: '100%'
     })
 
-    $("input[type=radio]").change(function() { 
-        if($(this).val() == "Estudiante" )
-        {
-            $('#teamupbundle_user_university').parent().show();
-            $('#teamupbundle_user_carrer').parent().show();
-            $('#teamupbundle_user_university').prop('disabled', false);
-            $('#teamupbundle_user_carrer').prop('disabled', false);
-        } 
-        else
-        {
-            $('#teamupbundle_user_university').parent().hide();
-            $('#teamupbundle_user_carrer').parent().hide();
-            $('#teamupbundle_user_university').prop('disabled', true);
-            $('#teamupbundle_user_carrer').prop('disabled', true);
-        }
-    });
 };
 
 function isValid()

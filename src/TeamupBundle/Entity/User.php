@@ -964,7 +964,7 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getOccupationOptions()
     {
-        $options = array('Estudiante', 'Trabajador Dependiente', 'Trabajador Independiente');
+        $options = array('Estudiante Pregrado', 'Estudiante Postgrados');
 
         return $options;
     }
