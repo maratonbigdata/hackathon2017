@@ -335,16 +335,15 @@ class TeamController extends Controller
      */
     public function eliminateAction($tid, $uid)
     {
+        $em = $this->getDoctrine()->getManager();
+        $team = $em->getRepository('TeamupBundle:Team')->find($tid);
+        $user = $em->getRepository('TeamupBundle:User')->find($uid);
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-        if($currentUser->getTeam() != $team->getId())
+
+        if($currentUser->getTeam()->getId() != $team->getId())
         {
             return $this->redirectToRoute('home');
         }
-
-        $em = $this->getDoctrine()->getManager();
-
-        $team = $em->getRepository('TeamupBundle:Team')->find($tid);
-        $user = $em->getRepository('TeamupBundle:User')->find($uid);
 
         $user->setTeam(null);
         $em->persist($team);
@@ -357,14 +356,14 @@ class TeamController extends Controller
         $currentUser = $this->get('security.token_storage')->getToken()->getUser();
 
         $message = \Swift_Message::newInstance()
-                    ->setSubject('Actualizaci? TeamUp')
+                    ->setSubject('Actualización TeamUp')
                     ->setFrom('gestionipre@ing.puc.cl')
                     ->setTo(array($user->getEmail()))
                     ->setBody('<html>' .
                         ' <head></head>' .
                         ' <body>' .
                         'Hola, '.$currentUser->getFullName().' te ha elliminado del equipo. </br>'.
-                        'Esperamos que esto no sea un inconveniente para participar de nuestra hackathon, ingresa a <a href="http://www.maratonbigdata.cl">TeamUp</a> y busca tu nuevo equipo!' .
+                        'Esperamos que esto no sea un inconveniente para participar de nuestra hackaton, ingresa a <a href="http://www.maratonbigdata.cl">TeamUp</a> y busca tu nuevo equipo!' .
                         '</br></br>'.
                         '(No responda este email)</body>' .
                         '</html>',

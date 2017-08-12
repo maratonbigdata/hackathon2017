@@ -214,6 +214,7 @@ class SecurityController extends Controller
 					    'text/html')
 				;
 				$this->get('mailer')->send($message);
+                echo var_dump($this->get('mailer')->send($message));
 	    	}
 	    }
 
