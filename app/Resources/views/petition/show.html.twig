@@ -4,11 +4,11 @@
     <h1>Solicitud</h1>
 
     {% if petition.sender.id == app.user.id %}
-        Has solicitado a {{petition.reciever.getFullname}} ser parte de <strong>{{petition.reciever.team.name}}</strong>, ellos cuentan con los siguientes integrantes:
+        Has solicitado a <a href="{{ path('user_show', { 'id': petition.reciever.id }) }}">{{petition.reciever.getFullname}}</a> ser parte de <strong>{{petition.reciever.team.name}}</strong>, ellos cuentan con los siguientes integrantes:
 
         <ul>
             {% for user in petition.reciever.team.users %}
-                <li>{{user.getFullName}}</li>
+                <li><a href="{{ path('user_show', { 'id': user.id }) }}">{{user.getFullName}}</a></li>
             {% endfor %}
         </ul>    
 
@@ -19,11 +19,11 @@
     {% else %}
         {% if petition.sender.hasTeam %}
 
-            {{petition.sender.getFullName}} en nombre de {{petition.sender.team.name}} le ha solicitado ser parte de <strong>{{petition.reciever.team.name}}</strong>. {{petition.sender.team.name}} cuenta con los siguientes integrantes:
+            <a href="{{ path('user_show', { 'id': petition.sender.id }) }}">{{petition.sender.getFullName}}</a> en nombre de {{petition.sender.team.name}} le ha solicitado ser parte de <strong>{{petition.reciever.team.name}}</strong>. {{petition.sender.team.name}} cuenta con los siguientes integrantes:
 
             <ul>
                 {% for user in petition.sender.team.users %}
-                    <li>{{user.getFullName}}</li>
+                    <li><a href="{{ path('user_show', { 'id': user.id }) }}">{{user.getFullName}}</a></li>
                 {% endfor %}
             </ul>    
 

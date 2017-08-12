@@ -9,7 +9,7 @@
 
             <ul>
                 {% for user in invitation.reciever.team.users %}
-                    <li>{{user.getFullName}}</li>
+                    <li><a href="{{ path('user_show', { 'id': user.id }) }}">{{user.getFullName}}</a></li>
                 {% endfor %}
             </ul>    
 
@@ -18,7 +18,7 @@
             <small style="float:left;">La invitación fue enviada el {% if invitation.date %}{{ invitation.date|date('Y-m-d H:i:s') }}{% endif %}</small>
 
         {% else %}
-            Has invitado a {{invitation.reciever.getFullName}} a ser parte de <strong>{{invitation.sender.team.name}}</strong>.<br>
+            Has invitado a <a href="{{ path('user_show', { 'id': invitation.reciever.id }) }}">{{invitation.reciever.getFullName}}</a> a ser parte de <strong>{{invitation.sender.team.name}}</strong>.<br>
 
             Estado de la invitación: {{invitation.getStateText}}<br><br>
 
@@ -31,11 +31,11 @@
         {% endif %}
 
     {% else %}
-        {{invitation.sender.getFullName}} le ha invitado a ser parte de su equipo <strong>{{invitation.sender.team.name}}</strong> con los siguientes integrantes:
+        <a href="{{ path('user_show', { 'id': invitation.sender.id }) }}">{{invitation.sender.getFullName}}</a> le ha invitado a ser parte de su equipo <strong>{{invitation.sender.team.name}}</strong> con los siguientes integrantes:
 
         <ul>
             {% for user in invitation.sender.team.users %}
-                <li>{{user.getFullName}}</li>
+                <li><a href="{{ path('user_show', { 'id': user.id }) }}">{{user.getFullName}}</a></li>
             {% endfor %}
         </ul>    
 
