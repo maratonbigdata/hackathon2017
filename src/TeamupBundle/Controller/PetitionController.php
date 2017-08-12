@@ -86,8 +86,8 @@ class PetitionController extends Controller
                 ->setBody('<html>' .
                     ' <head></head>' .
                     ' <body>' .
-                    ' Hola, un participante les ha solicitado a unirse a su equipo. <br>Para ver la solicitud, haga clíck <a href="'.$url.'">aqu?/a><br><br>'.
-                    'Recuerden que basta con que un miembro acepte la petici?<br><br>'.
+                    ' Hola, un participante les ha solicitado a unirse a su equipo. <br>Para ver la solicitud, haga clíck <a href="'.$url.'">aquí</a><br><br>'.
+                    'Recuerden que basta con que un miembro acepte la petición<br><br>'.
                     ' TeamUp'.
                     '</html>',
                     'text/html')
@@ -117,7 +117,7 @@ class PetitionController extends Controller
                 ->setBody('<html>' .
                     ' <head></head>' .
                     ' <body>' .
-                    ' Hola, un participante le ha solicitado a unirse a un equipo. <br>Para ver la solicitud, haga clíck <a href="'.$url.'">aqu?/a><br><br>'.
+                    ' Hola, un participante le ha solicitado a unirse a un equipo. <br>Para ver la solicitud, haga clíck <a href="'.$url.'">aquí</a><br><br>'.
                     ' TeamUp'.
                     '</html>',
                     'text/html')
