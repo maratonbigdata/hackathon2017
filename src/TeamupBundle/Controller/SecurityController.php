@@ -201,20 +201,19 @@ class SecurityController extends Controller
 
 	    		$message = \Swift_Message::newInstance()
 					->setSubject('Recuperación de contraseña')
-					->setFrom('gestionipre@ing.puc.cl')
+					->setFrom('maratonbigdata@uc.cl')
 					->setTo(array($user->getEmail()))
 					->setBody('<html>' .
 					    ' <head></head>' .
 					    ' <body>' .
 					    ' Hola, usa este link para recuperar tu contraseña: ' .
-					    '<a href="'.$url.'">'.$url.'</a>'.
+					    '<a href="'.$url.'">'.$url.'</a><br>'.
                         'Este link funciona solo una vez, si tiene problemas pide una nueva recuperación.</br>'.
-					    ' Si no pediste recuperar contraseña omite este email. (No responda este email)</body>' .
+					    '<br>Si no pediste recuperar contraseña omite este email. <br><br>(No responda este email)</body>' .
 					    '</html>',
 					    'text/html')
 				;
 				$this->get('mailer')->send($message);
-                echo var_dump($this->get('mailer')->send($message));
 	    	}
 	    }
 
@@ -301,7 +300,7 @@ class SecurityController extends Controller
 
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Bienvenido a Team Up, Activa tu cuenta')
-                    ->setFrom('gestionipre@ing.puc.cl')
+                    ->setFrom('maratonbigdata@uc.cl')
                     ->setTo(array($user->getEmail()))
                     ->setBody('<html>' .
                         ' <head></head>' .
