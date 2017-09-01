@@ -3,6 +3,8 @@
 {% block body %}
     <h1>Reporte</h1>
 
+    <p>Hay {{users|length}} usuarios</p>
+
     <table class="table table-striped">
         <thead>
             <tr>
@@ -31,8 +33,8 @@
                 <td>{{ user.occupation }}</td>
                 <td>{{ user.university }}</td>
                 <td>{{ user.carrer }}</td>
-                <td>{{ user.hasTeam }}</td>
-                <td>{% if user.hasTeam %}{{ user.team.getStatusText }}{% endif %}</td>
+                <td>{% if user.hasTeam %}Si{% else %}No{% endif %}</td>
+                <td>{% if user.hasTeam %}{{ user.team.getStatusText }}{% else %}--no tiene equipo--{% endif %}</td>
                 <td>{% if user.signed %}{{ user.signed|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{% if user.hasTeam and user.team.status == 2 %}{{ user.team.applied |date('Y-m-d H:i:s') }}{% endif %}</td>
             </tr>

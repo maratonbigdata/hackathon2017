@@ -11,4 +11,11 @@
 	<a class="btn btn-primary" target="_blank" href="http://www.maratonbigdata.cl/">Visita la web oficial</a>
 </center>
 
+<br>
+<br>
+
+{% if info|length > 0 %}
+<div class="alert alert-info" role="alert">{{info}}</div>
+{% endif %}
+
 {% endblock %}

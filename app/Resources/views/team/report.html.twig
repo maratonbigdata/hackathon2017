@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Reporte de Equipos</h1>
+
+    <p>Hay {{teams|length}} equipos</p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Participantes</th>
+                <th>Estado</th>
+                <th>Descripción</th>
+                <th>Fecha de creación</th>
+                <th>Fecha modificiación</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for team in teams %}
+            <tr>
+                <td>{{ team.name }}</td>
+                <td>
+                    <ul>
+                    {% for user in team.users %}
+                        <li>{{user.getFullName}}</li>
+                    {% endfor %}
+                    </ul>
+                </td>
+                <td>{{ team.getStatusText }}</td>
+                <td>{{ team.description }}</td>
+                <td>{% if team.created %}{{ team.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if team.modified %}{{ team.modified|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

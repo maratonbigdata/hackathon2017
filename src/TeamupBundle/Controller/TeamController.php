@@ -38,6 +38,23 @@ class TeamController extends Controller
     /**
      * Lists all team entities.
      *
+     * @Route("/reportTeam/mytsfGDGFKUYDCxfcghdtukCG", name="team_report")
+     * @Method("GET")
+     */
+    public function reportAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $teams = $em->getRepository('TeamupBundle:Team')->findAll();
+
+        return $this->render('team/report.html.twig', array(
+            'teams' => $teams,
+        ));
+    }
+
+    /**
+     * Lists all team entities.
+     *
      * @Route("/TeamMatcher", name="teams_finder")
      * @Method("GET")
      */
