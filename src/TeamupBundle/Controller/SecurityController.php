@@ -90,7 +90,7 @@ class SecurityController extends Controller
             $em->remove($restorer);
             $em->flush();
 
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('login_route');
 	    }
 
 	    return $this->render(
