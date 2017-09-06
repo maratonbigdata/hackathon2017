@@ -167,7 +167,7 @@ class InvitationController extends Controller
             return $this->redirectToRoute('home');
         }
         
-        if($petition->getState() == $state || $state == 1 || $petition->getState() == 5)
+        if($invitation->getState() == $state || $state == 1 || $invitation->getState() == 5)
         {
             return $this->redirectToRoute('invitation_show', array('id' => $invitation->getId()));    
         }
