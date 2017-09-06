@@ -175,7 +175,7 @@ class PetitionController extends Controller
 
         $recievedTeam = $petition->getReciever()->GetTeam();
 
-        if($petition->getReciever()->hasTeam())
+        if($petition->getSender()->hasTeam())
         {
             $petitionsTeam = $em->getRepository('TeamupBundle:Petition')->findOthersOfSameSenderTeam($petition);
 
