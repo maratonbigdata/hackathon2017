@@ -64,7 +64,7 @@
                                 <li><a href="{{path('logout')}}">Logout</a></li>
 
                                 {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                                    <li><a href="{{path('login_router', {'impersonate': '_exit'})}}">Dejar de personificar</a></li>
+                                    <li><a href="{{path('home', {'impersonate': '_exit'})}}">Dejar de personificar</a></li>
                                 {% endif %}
                             </ul>
                         {% else %}
