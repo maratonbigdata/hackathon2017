@@ -76,9 +76,16 @@ class Team
      */
     private $neededs;
 
+    /**
+     * One Team has Many Neededs.
+     * @ORM\Column(name="notified", type="boolean")
+     */
+    private $notified;
+
     public function __construct() {
         $this->users = new ArrayCollection();
         $this->neededs = new ArrayCollection();
+        $this->notified = false;
     }
 
 
@@ -470,5 +477,28 @@ class Team
     public function getApplied()
     {
         return $this->applied;
+    }
+
+    /**
+     * Set notified
+     *
+     * @param boolean $notified
+     * @return Team
+     */
+    public function setNotified($notified)
+    {
+        $this->notified = $notified;
+
+        return $this;
+    }
+
+    /**
+     * Get notified
+     *
+     * @return boolean 
+     */
+    public function getNotified()
+    {
+        return $this->notified;
     }
 }
